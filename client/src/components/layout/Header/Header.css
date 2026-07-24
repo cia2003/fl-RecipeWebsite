@@ -1,0 +1,25 @@
+.header-shell {
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+}
+
+.header-content {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.nav-links a {
+  color: var(--text-h);
+  text-decoration: none;
+  margin-left: 20px;
+}
