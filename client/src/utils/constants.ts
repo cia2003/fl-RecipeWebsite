@@ -1,1 +1,1 @@
-export const APP_NAME = 'Recipe App'
+export const APP_NAME = "Meal's Recipe"
