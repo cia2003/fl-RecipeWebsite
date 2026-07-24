@@ -1,7 +1,7 @@
-const useFetch = (url: string) => ({
-  data: null,
-  error: null,
-  loading: false,
-})
+// const useFetch = (url: string) => ({
+//   data: null,
+//   error: null,
+//   loading: false,
+// })
 
-export default useFetch
+// export default useFetch
