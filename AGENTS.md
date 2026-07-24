@@ -1,10 +1,9 @@
 # AGENTS.md
 
 ## Tech Stack
-- Node.js
-- esbuild
+- Vite
 - React
-- Tailwind CSS
+- Typescript
 
 ## Conventions
 - Use Conventional Commits:
