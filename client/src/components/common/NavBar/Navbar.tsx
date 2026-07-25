@@ -1,5 +1,6 @@
 import './Navbar.css'
 import Button from '../Button/Button'
+import { LuChevronDown } from 'react-icons/lu'
 
 
 
@@ -14,7 +15,7 @@ const Navbar = () => (
         </div>
         <div className="nav-section">
             <div className="nav-link-container">
-                <a className="nav-link text-large-body" href="#recipes">Recipes</a>
+                <a className="nav-link text-large-body" href="#recipes">Recipes <LuChevronDown /></a>
                 <a className="nav-link text-large-body" href="#favorites">Favorites</a>
             </div>
             <div className="nav-link-container">

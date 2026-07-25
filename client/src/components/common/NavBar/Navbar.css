@@ -22,6 +22,10 @@
     text-decoration: none;
     transition: all 0.3s ease-in-out;
 }
+.nav-link:hover {
+    color: var(--main);
+    text-decoration: underline;
+}
 .nav-buttons {
     display: flex;
     gap: 10px;
