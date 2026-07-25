@@ -1,12 +1,10 @@
 import './Header.css'
+import NavBar from '../../common/NavBar/Navbar'
 
 const Header = () => (
   <header className="header-shell">
     <div className="header-content">
-      <div className="brand">Recipe App</div>
-      <nav className="nav-links">
-        <a href="#home">Home</a>
-      </nav>
+      <NavBar />
     </div>
   </header>
 )

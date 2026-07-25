@@ -1,17 +1,35 @@
 .button {
   border: none;
   border-radius: 10px;
-  padding: 12px 18px;
+  padding: 10px;
   cursor: pointer;
-  font: inherit;
 }
 
 .button[data-variant='primary'] {
-  color: white;
-  background: var(--accent);
+  color: var(--background);
+  background: var(--main);
+  border: 1px solid var(--main);
+}
+
+.button[data-variant='primary']:active {
+  background: var(--main-active);
+  border: 1px solid var(--main-active);
+}
+
+.button[data-variant='primary']:hover {
+  background: var(--main-hover);
+  border: 1px solid var(--main-hover);
+}
+
+.button[data-variant='primary']:focus {
+  border: 1px solid var(--text);
 }
 
 .button[data-variant='secondary'] {
-  color: var(--text-h);
-  background: var(--border);
+  color: var(--main);
+  background: var(--background);
+}
+
+.button[data-variant='secondary']:hover {
+  text-decoration: underline;
 }

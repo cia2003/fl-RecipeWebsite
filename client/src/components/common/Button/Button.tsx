@@ -6,8 +6,8 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary'
 }
 
-const Button = ({ children, onClick, variant = 'primary' }: ButtonProps) => (
-  <button className={styles.button} data-variant={variant} onClick={onClick}>
+const Button = ({ children, onClick, variant='primary' }: ButtonProps) => (
+  <button className={`${styles.button} text-large-body`} data-variant={variant} onClick={onClick}>
     {children}
   </button>
 )
