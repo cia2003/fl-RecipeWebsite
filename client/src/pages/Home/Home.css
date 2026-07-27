@@ -1,11 +1,104 @@
 .home-page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 100px;
+}
+.home-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 0 90px;
+}
+.recommended-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 100px;
+}
+.recommended-header {
+  display: flex;
   align-items: center;
-  min-height: calc(100vh - 132px);
+  gap: 15px;
+}
+.recommended-cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 24px;
 }
 
-.hero-card {
+.featured-card {
+  grid-column: span 3;
+  gap: 15px;
+  position: relative;
+}
+.featured-card img {
   width: 100%;
-  max-width: 860px;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+}
+.featured-card-title, .small-card-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--main);
+  color: white;
+  padding: 10px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.small-card {
+  gap: 15px;
+  position: relative;
+}
+.small-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.recommended-cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.categories-cards-container {
+  display: flex;
+  gap: 15px;
+  border-right: 1px solid var(--border);
+  border-top: 1px solid var(--main);
+}
+.category-filter-btn {
+  padding: 10px;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--background);
+  border: 1px solid var(--border);
+}
+.categories-cards-result {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  padding-top: 20px;
+}
+.home-section-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.horizontal-rule {
+  width: 100%;
+  height: 3px;
+  background-color: var(--text);
+}
+.explore-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  padding-top: 120px;
+  padding-bottom: 120px;
 }

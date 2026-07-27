@@ -11,7 +11,7 @@
   --main: #C1613D;
   --main-active: #8F4127;
   --main-hover: #A84F30;
-  
+
   --accent: #5F7A5A;
   --link: #C1613D;
   --border: #E8C9B8;
@@ -68,21 +68,21 @@ body {
   color: var(--text);
 }
 
-.text-3xl {
+.text-3xl-title {
   font-family: var(--font-title);
   font-size: var(--text-4xl-desktop);
   line-height: var(--line-height-large-desktop);
   font-weight: var(--font-weight-bold);
 }
 
-.text-2xl {
+.text-2xl-title {
   font-family: var(--font-title);
   font-size: var(--text-3xl-desktop);
   line-height: var(--line-height-xl-desktop);
   font-weight: var(--font-weight-bold);
 }
 
-.text-xl {
+.text-xl-title {
   font-family: var(--font-title);
   font-size: var(--text-2xl-desktop);
   line-height: var(--line-height-large-desktop);
@@ -100,13 +100,14 @@ body {
   font-family: var(--font-title);
   font-size: var(--text-medium-desktop);
   line-height: var(--line-height-base-desktop);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
 }
 
 .text-base-title {
   font-family: var(--font-title);
   font-size: var(--text-base-desktop);
   line-height: var(--line-height-base-desktop);
+  font-weight: var(--font-weight-bold);
 }
 
 .text-large-body {

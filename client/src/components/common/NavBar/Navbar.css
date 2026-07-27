@@ -15,16 +15,28 @@
 .nav-link-container {
     display: flex;
     gap: 20px;
-    /* border: 1px solid var(--border); */
 }
 .nav-link {
+    display: flex;
     color: var(--text);
     text-decoration: none;
     transition: all 0.3s ease-in-out;
+    align-items: center;
 }
-.nav-link:hover {
+.nav-link:hover, .nav-link:focus, .nav-link:active {
     color: var(--main);
-    text-decoration: underline;
+}
+.nav-dropdown {
+    display: grid;
+    position: absolute;
+    background-color: var(--background);
+    box-shadow: var(--shadow);
+    border-radius: 5px;
+    z-index: 1000;
+    padding: 10px 15px;
+    border: 1px solid var(--text);
+    gap: 10px;
+    transition: all 0.3s ease-in-out;
 }
 .nav-buttons {
     display: flex;

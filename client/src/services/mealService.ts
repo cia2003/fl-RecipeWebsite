@@ -122,3 +122,16 @@ const filterByArea = async (area: string) => {
         throw error
     }
 }
+
+export {
+    filterByCategory,
+    filterByMainIngredient,
+    getBrowseableListForArea,
+    getBrowseableListForCategory,
+    getBrowseableListForIngredient,
+    listAllMealCategories,
+    listMealByFirstLetter,
+    lookupMealById,
+    lookupSingleRandomMeal,
+    searchMealByName,
+}

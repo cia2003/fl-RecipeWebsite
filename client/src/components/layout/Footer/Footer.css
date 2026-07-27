@@ -1,12 +1,36 @@
 .footer-shell {
-  border-top: 1px solid var(--border);
-  padding: 18px 24px;
-  background: rgba(255, 255, 255, 0.9);
+  display: grid;
+  gap: 115px;
+  border-top: 1px solid var(--text);
+  padding: 150px 90px 50px 90px;
+  background: var(--background);
+}
+.footer-content {
+  display: flex;
+  gap: 70px;
+  justify-content: space-between;
 }
 
-.footer-content {
+.footer-nav {
+  display: flex;
+  gap: 50px;
+}
+
+.footer-attribution {
   width: min(1120px, 100%);
   margin: 0 auto;
   text-align: center;
   color: var(--text);
+  margin-top: 30px;
+}
+
+.footer-contact-section {
+  display: grid;
+  gap: 30px;
+}
+
+.footer-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
