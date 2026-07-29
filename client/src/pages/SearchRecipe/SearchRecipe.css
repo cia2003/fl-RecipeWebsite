@@ -1,0 +1,22 @@
+.search-recipe-section {
+    display: grid;
+    margin: 100px 90px;
+    gap: 55px;
+}
+.intro-content {
+    display: grid;
+    gap: 15px;
+}
+.search-recipe-header {
+    display: grid;
+    gap: 100px;
+}
+.search-recipe__filter-container {
+
+}
+.search-recipe__dropdown-menu {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--text);
+}

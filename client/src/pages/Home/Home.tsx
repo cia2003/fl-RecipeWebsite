@@ -1,16 +1,22 @@
 import './Home.css'
 import { useEffect, useState } from 'react'
-import Card from '../../components/common/Card/Card'
 import Button from '../../components/common/Button/Button'
-import useHomeActions, { type MealCard } from './useHomeActions'
+import type { MealCard } from '../../types/meal.types'
+import { useMeals } from '../../hooks/useMeals'
+import { useNavigate } from 'react-router-dom'
+
+const categories = ['Chicken', 'Beef', 'Pork']
+
+const mealImageUrl = (meal: MealCard) => `${meal.img}/medium`
 
 function Home() {
-  const {
-    getFourRandomMeals,
-    isLoading,
-  } = useHomeActions()
-  
-  const [threeRandomMeals, setThreeRandomMeals] = useState<MealCard[]>([])
+  const [fourRandomMeals, setFourRandomMeals] = useState<MealCard[]>([])
+  const [filteredMeals, setFilteredMeals] = useState<MealCard[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<(typeof categories)[number]>('Chicken')
+
+  const { getFourRandomMeals, getMealsByCategory, isLoading } = useMeals()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     let isCurrent = true
@@ -19,7 +25,7 @@ function Home() {
       const meals = await getFourRandomMeals()
 
       if (isCurrent && meals) {
-        setThreeRandomMeals(meals as MealCard[])
+        setFourRandomMeals(meals as MealCard[])
       }
     }
 
@@ -30,11 +36,29 @@ function Home() {
     }
   }, [getFourRandomMeals])
 
+  useEffect(() => {
+    let isCurrent = true
+
+    const loadMeals = async () => {
+      const meals = await getMealsByCategory(selectedCategory, 0, 4)
+
+      if (isCurrent && meals) {
+        setFilteredMeals(meals as MealCard[])
+      }
+    }
+
+    void loadMeals()
+
+    return () => {
+      isCurrent = false
+    }
+  }, [getMealsByCategory, selectedCategory])
+
   return (
     <article className="home-page">
 
       <section className="recommended-section home-section">
-        <div className="home-section-header">
+        <div className="section-header">
           <h2 className="text-xl-title" style={{ whiteSpace: 'nowrap' }}>
             Recommended for You
           </h2>
@@ -44,31 +68,25 @@ function Home() {
         <div className="home-section-content recommended-cards-container">
           {isLoading && <p className="text-base-body">Loading recipes…</p>}
 
-          {threeRandomMeals[0] && (
+          {fourRandomMeals[0] && (
             <article className='featured-card'>
-              <img src={threeRandomMeals[0].img + "/medium"} alt={threeRandomMeals[0].id} />
-              <h3 className='text-large-title featured-card-title'>{threeRandomMeals[0].title}</h3>
+              <img src={mealImageUrl(fourRandomMeals[0])} alt={fourRandomMeals[0].title} />
+              <h3 className='text-large-title featured-card-title'>{fourRandomMeals[0].title}</h3>
             </article>
           )}
 
-          {threeRandomMeals.slice(1).map((meal) => (
-            <article className='small-card'>
-              <img src={meal.img + "/medium"} alt={meal.id} />
+          {fourRandomMeals.slice(1).map((meal) => (
+            <article className='small-card' key={meal.id}>
+              <img src={mealImageUrl(meal)} alt={meal.title} />
               <h3 className='text-large-title small-card-title'>{meal.title}</h3>
             </article>
           ))}
 
         </div>
-
-        <div>
-          <Button variant="primary">
-            SEE MORE RECIPE
-          </Button>
-        </div>
       </section>
 
       <section className="categories-section home-section">
-        <div className="home-section-header">
+        <div className="section-header">
           <h2 className="text-xl-title" style={{ whiteSpace: 'nowrap' }}>
             Popular Categories
           </h2>
@@ -77,35 +95,48 @@ function Home() {
 
         <div className="home-section-content categories-cards-container">
           <div className="categories-cards-filter">
-            <div className="category-filter-btn text-large-body">Chicken</div>
-            <div className="category-filter-btn text-large-body">Beef</div>
-            <div className="category-filter-btn text-large-body">Pork</div>
+            {categories.map((category) => (
+              <button
+                className="category-filter-btn text-large-body active"
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                type="button"
+              >
+                {category}
+              </button>
+            ))}
           </div>
 
           <div className='categories-cards-result'>
-            {}
-            <Card id="category1" title="Category 1">
-              <p className="text-base-body">This is the content of Category 1.</p>
-            </Card>
-            <Card id="category2" title="Category 2">
-              <p className="text-base-body">This is the content of Category 2.</p>
-            </Card>
-            <Card id="category3" title="Category 3">
-              <p className="text-base-body">This is the content of Category 3.</p>
-            </Card>
-            <Card id="category3" title="Category 3">
-              <p className="text-base-body">This is the content of Category 3.</p>
-            </Card>
+            {isLoading && <p className="text-base-body">Loading recipes…</p>}
+
+            {!isLoading && filteredMeals.map((meal) => (
+              <article className='small-card' key={meal.id}>
+                <img src={mealImageUrl(meal)} alt={meal.title} />
+                <h3 className='text-large-title small-card-title'>{meal.title}</h3>
+              </article>        
+            ))}
           </div>
 
         </div>
       </section>
 
       <section className="explore-section home-section">
-        <h2 className='text-xl-title'>WANT TO SEE OTHER RECIPES?</h2>
-          <Button variant="primary">
+        {fourRandomMeals[0] && (
+          <img
+            aria-hidden="true"
+            className="explore-img"
+            src={"https://www.idealyrecipes.com/wp-content/uploads/2025/10/agar-vs-gelatin-fruit-cubes.webp"}
+            alt="food-img"
+          />
+        )}
+        <div className='explore-content'>
+          <h2 className='text-xl-title explore-title'>WANT TO SEE OTHER RECIPES?</h2>
+          <Button variant="primary" onClick={() => navigate('/recipes')}>
             EXPLORE OUR MENU
-          </Button>
+          </Button>          
+        </div>
+
       </section>
     </article>
   )

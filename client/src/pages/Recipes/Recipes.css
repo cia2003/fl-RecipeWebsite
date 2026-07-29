@@ -1,0 +1,21 @@
+/* @import url("../Home/Home.css"); */
+
+.recipe-section {
+    display: grid;
+    margin: 100px 90px;
+    gap: 55px;
+}
+.recipe-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+.intro-header {
+    flex-direction: column;
+    gap: 65px;
+    text-align: center;
+}
+.search-form-container {
+    display: flex;
+    justify-content: center;
+}

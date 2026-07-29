@@ -1,6 +1,6 @@
 import Header from './components/layout/Header/Header'
 import Footer from './components/layout/Footer/Footer'
-import Home from './pages/Home/Home'
+import AppRoutes from './routes/AppRoutes'
 import './App.css'
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <div className="app-shell">
       <Header />
       <main className="app-main">
-        <Home />
+        <AppRoutes/>
       </main>
       <Footer />
     </div>

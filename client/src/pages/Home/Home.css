@@ -70,6 +70,10 @@
   border-right: 1px solid var(--border);
   border-top: 1px solid var(--main);
 }
+.categories-cards-filter {
+  display: flex;
+  flex-direction: column;
+}
 .category-filter-btn {
   padding: 10px;
   cursor: pointer;
@@ -81,9 +85,8 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-  padding-top: 20px;
 }
-.home-section-header {
+.section-header {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -94,11 +97,53 @@
   background-color: var(--text);
 }
 .explore-section {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 50px;
-  padding-top: 120px;
-  padding-bottom: 120px;
+  width: 100vw;
+  min-height: 420px;
+  margin-left: calc(50% - 50vw);
+  padding: 120px 64px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: var(--text);
+  color: var(--background);
+}
+.explore-section::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: '';
+  background-color: rgb(42 35 32 / 50%);
+}
+.explore-img {
+  position: absolute;
+  z-index: -2;
+  inset: -12px;
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  filter: blur(8px);
+}
+.explore-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 15px;
+}
+.explore-title {
+  color: var(--background);
+}
+
+.active {
+  background-color: var(--main);
+  color: white;
 }
