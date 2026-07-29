@@ -1,15 +1,23 @@
 import { useCallback, useState } from "react";
-import type { MealCard, Meal } from "../types/meal.types";
+import type {
+  CategoriesResponse,
+  Category,
+  CategoryDetail,
+  Meal,
+  MealCard,
+  MealsResponse,
+} from "../types/meal.types";
 import {
   lookupSingleRandomMeal,
   filterByCategory,
+  listAllMealCategories
 } from '../services/mealService'
 
 
 
 export function useMeals() {
     const [isLoading, setIsLoading] = useState(false)
-    const runMealRequest = useCallback(async (request: () => Promise<unknown>) => {
+    const runMealRequest = useCallback(async <T,>(request: () => Promise<T>): Promise<T | null> => {
         setIsLoading(true)
 
         try {
@@ -49,7 +57,7 @@ export function useMeals() {
     const getMealsByCategory = useCallback(
         (category: string, startSlice: number, endSlice: number) => {
     return runMealRequest(async () => {
-            const response = await filterByCategory(category)
+            const response = await filterByCategory(category) as MealsResponse
             const toMealCard = (meal: Meal): MealCard => ({
                 id: meal.idMeal, 
                 title: meal.strMeal, 
@@ -65,9 +73,27 @@ export function useMeals() {
         [runMealRequest]
     )
 
+    const getListOfCategories = useCallback (() => {
+        return runMealRequest(async () => {
+            const response = await listAllMealCategories() as CategoriesResponse
+            const toCategoryDetail = (category: Category): CategoryDetail => ({
+                id: category.idCategory,
+                name: category.strCategory,
+                img: category.strCategoryThumb,
+                description: category.strCategoryDescription
+            })
+            const categories = response.categories.map((toCategoryDetail))
+
+            return categories
+
+        })
+    }, [runMealRequest]
+    )
+
     return {
         getFourRandomMeals, 
         getMealsByCategory, 
+        getListOfCategories,
         isLoading
     }
 }

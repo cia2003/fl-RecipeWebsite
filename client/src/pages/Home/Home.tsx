@@ -97,7 +97,7 @@ function Home() {
           <div className="categories-cards-filter">
             {categories.map((category) => (
               <button
-                className="category-filter-btn text-large-body active"
+                className={`category-filter-btn text-large-body ${selectedCategory === category ? 'active' : ''}`}
                 key={category}
                 onClick={() => setSelectedCategory(category)}
                 type="button"
