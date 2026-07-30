@@ -2,7 +2,10 @@ import { useCallback, useState } from "react";
 import type {
   CategoriesResponse,
   Category,
-  CategoryDetail,
+  CategoryCard,
+  Ingredient,
+  IngredientCard,
+  IngredientsResponse,
   Meal,
   MealCard,
   MealsResponse,
@@ -10,7 +13,11 @@ import type {
 import {
   lookupSingleRandomMeal,
   filterByCategory,
-  listAllMealCategories
+  listAllMealCategories, 
+  filterByMainIngredient, 
+  filterByArea, 
+  getBrowseableListForCategory, 
+  getBrowseableListForIngredient
 } from '../services/mealService'
 
 
@@ -31,12 +38,12 @@ export function useMeals() {
     }, [])
 
     // useMeals.ts
-    const getFourRandomMeals = useCallback(() => {
+    const getRandomMeals = useCallback((numData: number) => {
     return runMealRequest(async () => {
         const meals: MealCard[] = []
         const ids = new Set<string>()
 
-        while (meals.length < 4) {
+        while (meals.length < numData) {
         const response = await lookupSingleRandomMeal()
         const meal = response.meals[0]
 
@@ -46,6 +53,8 @@ export function useMeals() {
             id: meal.idMeal,
             title: meal.strMeal,
             img: meal.strMealThumb,
+            category: meal.strCategory, 
+            country: meal.strCountry
             })
         }
         }
@@ -59,9 +68,11 @@ export function useMeals() {
     return runMealRequest(async () => {
             const response = await filterByCategory(category) as MealsResponse
             const toMealCard = (meal: Meal): MealCard => ({
-                id: meal.idMeal, 
-                title: meal.strMeal, 
-                img: meal.strMealThumb
+                id: meal.idMeal,
+                title: meal.strMeal,
+                img: meal.strMealThumb,
+                category: meal.strCategory, 
+                country: meal.strCountry
             })
             const meals =  response.meals
                 .slice(startSlice, endSlice)
@@ -73,16 +84,16 @@ export function useMeals() {
         [runMealRequest]
     )
 
-    const getListOfCategories = useCallback (() => {
+    const getListOfCategories = useCallback ((startSlice: number, endSlice:number) => {
         return runMealRequest(async () => {
             const response = await listAllMealCategories() as CategoriesResponse
-            const toCategoryDetail = (category: Category): CategoryDetail => ({
+            const toCategoryCard = (category: Category): CategoryCard => ({
                 id: category.idCategory,
                 name: category.strCategory,
                 img: category.strCategoryThumb,
                 description: category.strCategoryDescription
             })
-            const categories = response.categories.map((toCategoryDetail))
+            const categories = response.categories.slice(startSlice, endSlice).map((toCategoryCard))
 
             return categories
 
@@ -90,10 +101,88 @@ export function useMeals() {
     }, [runMealRequest]
     )
 
+    const getBrowserableListOfCategories = useCallback (() => {
+        return runMealRequest(async () => {
+            const response = await getBrowseableListForCategory() as CategoriesResponse
+            const toCategoryCard = (category: Category): CategoryCard => ({
+                id: category.idCategory,
+                name: category.strCategory,
+                img: category.strCategoryThumb,
+                description: category.strCategoryDescription
+            })
+            const categories = response.categories.map((toCategoryCard))
+
+            return categories
+
+        })
+    }, [runMealRequest]
+    )
+
+
+    const getBrowserableListOfMainIngredients = useCallback ((startSlice: number, endSlice: number) => {
+        return runMealRequest(async () => {
+            const response = await getBrowseableListForIngredient() as IngredientsResponse
+            const toIngredientCard = (ingredient: Ingredient): IngredientCard => ({
+                id: ingredient.idIngredient,
+                name: ingredient.strIngredient,
+                img: ingredient.strThumb,
+                description: ingredient.strDescription
+            })
+            const ingredients = response.meals.slice(startSlice, endSlice).map((toIngredientCard))
+            
+            return ingredients
+
+        })
+    }, [runMealRequest]
+    )
+    
+    const getMealsByArea = useCallback(
+        (area: string, startSlice: number, endSlice: number) => {
+    return runMealRequest(async () => {
+            const response = await filterByArea(area) as MealsResponse
+            const toMealCard = (meal: Meal): MealCard => ({
+                id: meal.idMeal,
+                title: meal.strMeal,
+                img: meal.strMealThumb,
+                category: meal.strCategory, 
+                country: meal.strCountry
+            })
+            const meals =  response.meals
+                .slice(startSlice, endSlice)
+                .map((toMealCard))
+            
+            return meals
+            })
+        }, 
+        [runMealRequest]
+    )
+
+    const getMealsByMainIngredient = useCallback(
+        (mainIngredient: string, startSlice: number, endSlice: number) => {
+    return runMealRequest(async () => {
+            const response = await filterByMainIngredient(mainIngredient) as MealsResponse
+            const toMealCard = (meal: Meal): MealCard => ({
+                id: meal.idMeal,
+                title: meal.strMeal,
+                img: meal.strMealThumb,
+                category: meal.strCategory, 
+                country: meal.strCountry
+            })
+            const meals =  response.meals
+                .slice(startSlice, endSlice)
+                .map((toMealCard))
+            
+            return meals
+            })
+        }, 
+        [runMealRequest]
+    )
+
     return {
-        getFourRandomMeals, 
+        getRandomMeals, 
         getMealsByCategory, 
         getListOfCategories,
+        getBrowserableListOfMainIngredients,
         isLoading
     }
 }

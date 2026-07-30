@@ -1,8 +1,9 @@
 .nav-container {
     width: 100%;
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: 30px;
+    text-wrap: nowrap;
 }
 
 .nav-section {
@@ -14,6 +15,12 @@
 
 .nav-link-container {
     display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.nav-link-container__right-section {
+    display: flex;
+    align-items: center;
     gap: 20px;
 }
 .nav-link {

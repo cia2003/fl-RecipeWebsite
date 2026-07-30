@@ -1,143 +1,174 @@
 import './Home.css'
-import { useEffect, useState } from 'react'
-import Button from '../../components/common/Button/Button'
-import type { MealCard } from '../../types/meal.types'
-import { useMeals } from '../../hooks/useMeals'
+import '../../components/common/Card/Card.css'
+
+import { LuSearch, LuDices, LuChevronRight, LuLeaf, LuGlobe, LuCookingPot } from 'react-icons/lu'
+import { useHomeMeals } from '../../hooks/useHomeMeals'
 import { useNavigate } from 'react-router-dom'
 
-const categories = ['Chicken', 'Beef', 'Pork']
+import Button from '../../components/common/Button/Button'
+import HeroImage from '../../assets/images/hero-section-home.jpg'
+import ExploreImage from "../../assets/images/explore-section-home.jpg"
+import RandomMealBackgroundImage from "../../assets/images/random-meals-home.png"
 
-const mealImageUrl = (meal: MealCard) => `${meal.img}/medium`
+import landmarks from '../../data/landmark'
 
 function Home() {
-  const [fourRandomMeals, setFourRandomMeals] = useState<MealCard[]>([])
-  const [filteredMeals, setFilteredMeals] = useState<MealCard[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<(typeof categories)[number]>('Chicken')
-
-  const { getFourRandomMeals, getMealsByCategory, isLoading } = useMeals()
-
+  const { randomMeals, browserableCategory, browserableIngredient } = useHomeMeals()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    let isCurrent = true
-
-    const loadMeals = async () => {
-      const meals = await getFourRandomMeals()
-
-      if (isCurrent && meals) {
-        setFourRandomMeals(meals as MealCard[])
-      }
-    }
-
-    void loadMeals()
-
-    return () => {
-      isCurrent = false
-    }
-  }, [getFourRandomMeals])
-
-  useEffect(() => {
-    let isCurrent = true
-
-    const loadMeals = async () => {
-      const meals = await getMealsByCategory(selectedCategory, 0, 4)
-
-      if (isCurrent && meals) {
-        setFilteredMeals(meals as MealCard[])
-      }
-    }
-
-    void loadMeals()
-
-    return () => {
-      isCurrent = false
-    }
-  }, [getMealsByCategory, selectedCategory])
 
   return (
     <article className="home-page">
 
-      <section className="recommended-section home-section">
-        <div className="section-header">
-          <h2 className="text-xl-title" style={{ whiteSpace: 'nowrap' }}>
-            Recommended for You
-          </h2>
-          <div className="horizontal-rule"></div>
+      <section className='hero-section'>
+        <img src={HeroImage} alt="hero-image-page" className='hero-img' />
+        <div className='hero-content'>
+          <div className='hero-inner-content'>
+            <h1 className='text-2xl-title'>
+              Discover Delicious <br />
+              Meals <span>You'll Love</span>
+            </h1>
+            <p className='text-large-body'>
+              Explore thousands of recipes from around the world. <br />
+              Find your next favorite meal!
+            </p>
+            <div className='search-form-container'>
+              <form action="" className='search-form'>
+                <input type="text" placeholder='Search for a recipe, ingredient, or dish...' className='search-input text-medium-body'/>
+                <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
+              </form>
+            </div>            
+          </div>
+        </div>
+      </section>
+
+      <section className='home-section'>
+        <div className='home-section__header'>
+          <div className='home-section__text-container'>
+            <LuDices size={50} className='home-section__icon' />
+            <div className='home-section__inner-text-container'>
+              <h2 className='text-large-title'>Recommended Meals</h2>
+              <p className='text-medium-body'>Get inspired by a recommended selection of meals.</p>
+            </div>
+          </div>
+          <a href="/recipes" className='text-medium-body home-section__link'>See more recipes <LuChevronRight /></a>
+        </div>
+        <div className='home-section__body'>
+          {
+            randomMeals.map((meal) => {
+              return (
+                <article className='card' onClick={() => navigate('/recipes')}>
+                    <img src={meal.img} alt={meal.title} className='card__img' />
+                    <div className='card-content'>
+                        <p className='text-medium-body text-bold'>{meal.title}</p>
+                        <p className='text-base-body'>{meal.country}</p>
+                    </div>
+                    <p className='text-base-body tag'>{meal.category}</p>
+                </article>
+              )
+            })
+          }
+        </div>
+      </section>
+
+      <section className='home-section'>
+        <div className='home-section__header'>
+          <div className='home-section__text-container'>
+            <LuLeaf size={50} className='home-section__icon' />
+            <div className='home-section__inner-text-container'>
+              <h2 className='text-large-title'>Browse by Category</h2>
+              <p className='text-medium-body'>Quickly find recipes by meal category.</p>
+            </div>
+          </div>
+          <a href="/recipes" className='text-medium-body home-section__link'>View All Categories <LuChevronRight /></a>
+        </div>
+        <div className='home-section__body'>
+          {
+            browserableCategory.map((category) => {
+              return (
+                <article className='card' onClick={() => navigate('/recipes')}>
+                    <img src={category.img} alt={category.name} className='card__img' />
+                    <p className='text-base-body tag'>{category.name}</p>
+                </article>
+              )
+            })
+          }
+        </div>
+      </section>
+
+      <section className='explore-section'>
+        <img src={RandomMealBackgroundImage} alt="explore-image-home" className='explore-section-img' />
+        <div className='explore-section__header'>
+          <div className='explore-section__text-container'>
+            <p className='text-xl-title'>Still confused about what to eat today?</p>
+            <p className='text-medium-body'>Discover a random recipe and get inspired for your next meal.</p>            
+          </div>
+          <Button variant='primary'>SURPRISE ME!</Button>
         </div>
         
-        <div className="home-section-content recommended-cards-container">
-          {isLoading && <p className="text-base-body">Loading recipes…</p>}
-
-          {fourRandomMeals[0] && (
-            <article className='featured-card'>
-              <img src={mealImageUrl(fourRandomMeals[0])} alt={fourRandomMeals[0].title} />
-              <h3 className='text-large-title featured-card-title'>{fourRandomMeals[0].title}</h3>
-            </article>
-          )}
-
-          {fourRandomMeals.slice(1).map((meal) => (
-            <article className='small-card' key={meal.id}>
-              <img src={mealImageUrl(meal)} alt={meal.title} />
-              <h3 className='text-large-title small-card-title'>{meal.title}</h3>
-            </article>
-          ))}
-
-        </div>
       </section>
 
-      <section className="categories-section home-section">
-        <div className="section-header">
-          <h2 className="text-xl-title" style={{ whiteSpace: 'nowrap' }}>
-            Popular Categories
-          </h2>
-          <div className="horizontal-rule"></div>
-        </div>
-
-        <div className="home-section-content categories-cards-container">
-          <div className="categories-cards-filter">
-            {categories.map((category) => (
-              <button
-                className={`category-filter-btn text-large-body ${selectedCategory === category ? 'active' : ''}`}
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                type="button"
-              >
-                {category}
-              </button>
-            ))}
+      <section className='home-section'>
+        <div className='home-section__header'>
+          <div className='home-section__text-container'>
+            <LuCookingPot size={50} className='home-section__icon' />
+            <div className='home-section__inner-text-container'>
+              <h2 className='text-large-title'>Browse by Main Ingredient</h2>
+              <p className='text-medium-body'>Find recipes using your favorite ingredients.</p>
+            </div>
           </div>
-
-          <div className='categories-cards-result'>
-            {isLoading && <p className="text-base-body">Loading recipes…</p>}
-
-            {!isLoading && filteredMeals.map((meal) => (
-              <article className='small-card' key={meal.id}>
-                <img src={mealImageUrl(meal)} alt={meal.title} />
-                <h3 className='text-large-title small-card-title'>{meal.title}</h3>
-              </article>        
-            ))}
+          <a href="/recipes" className='text-medium-body home-section__link'>View All Ingredients <LuChevronRight /></a>
+        </div>
+        <div className='home-section__body'>
+          {
+            browserableIngredient.map((ingredient) => {
+              return (
+                <article className='card' onClick={() => navigate('/recipes')}>
+                    <img src={ingredient.img} alt={ingredient.name} className='card__img' />
+                    <p className='text-base-body tag'>{ingredient.name}</p>
+                </article>
+              )
+            })
+          }
+        </div>
+      </section>
+    
+      <section className='home-section'>
+        <div className='home-section__header'>
+          <div className='home-section__text-container'>
+            <LuGlobe size={50} className='home-section__icon' />
+            <div className='home-section__inner-text-container'>
+              <h2 className='text-large-title'>Browse by Cuisine (Area)</h2>
+              <p className='text-medium-body'>Explore recipes from cuisines around the world.</p>
+            </div>
           </div>
-
+          <a href="/recipes" className='text-medium-body home-section__link'>View All Cuisines <LuChevronRight /></a>
+        </div>
+        <div className='home-section__body'>
+          {
+            landmarks.map((landmark) => {
+              return (
+                <article className='card' onClick={() => navigate('/recipes')}>
+                    <img src={landmark.img} alt={landmark.name} className='card__img' />
+                    <p className='text-base-body tag'>{landmark.country}</p>
+                </article>
+              )
+            })
+          }
         </div>
       </section>
 
-      <section className="explore-section home-section">
-        {fourRandomMeals[0] && (
-          <img
-            aria-hidden="true"
-            className="explore-img"
-            src={"https://www.idealyrecipes.com/wp-content/uploads/2025/10/agar-vs-gelatin-fruit-cubes.webp"}
-            alt="food-img"
-          />
-        )}
-        <div className='explore-content'>
-          <h2 className='text-xl-title explore-title'>WANT TO SEE OTHER RECIPES?</h2>
-          <Button variant="primary" onClick={() => navigate('/recipes')}>
-            EXPLORE OUR MENU
-          </Button>          
+      <section className='explore-section'>
+        <img src={ExploreImage} alt="explore-image-home" className='explore-section-img' />
+        <div className='explore-section__header'>
+          <div className='explore-section__text-container'>
+            <p className='text-xl-title'>Want to explore more recipes?</p>
+            <p className='text-medium-body'>Browse our fill collection and find the perfect meal for any occasion.</p>            
+          </div>
+          <Button variant='primary'>EXPLORE ALL RECIPES <LuChevronRight /></Button>
         </div>
-
+        
       </section>
+
     </article>
   )
 }

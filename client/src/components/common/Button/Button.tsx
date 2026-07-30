@@ -4,10 +4,11 @@ interface ButtonProps {
   children: React.ReactNode
   onClick?: () => void
   variant?: 'primary' | 'secondary'
+  size?: 'base' | 'medium' | 'large'
 }
 
-const Button = ({ children, onClick, variant='primary' }: ButtonProps) => (
-  <button className={`${styles.button} text-large-body`} data-variant={variant} onClick={onClick}>
+const Button = ({ children, onClick, variant='primary', size='large' }: ButtonProps) => (
+  <button className={`${styles.button} text-${size}-body`} data-variant={variant} onClick={onClick}>
     {children}
   </button>
 )

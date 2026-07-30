@@ -7,6 +7,7 @@
 :root {
   --text: #2A2320;
   --background: #FBF7F2;
+  --background-darker: #f4f0eb;
 
   --main: #C1613D;
   --main-active: #8F4127;
@@ -128,4 +129,12 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base-desktop);
   line-height: var(--line-height-base-desktop);
+}
+
+.text-color-main {
+  color: var(--main);
+}
+
+.text-bold {
+  font-weight: 700;
 }

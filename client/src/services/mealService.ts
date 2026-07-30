@@ -126,6 +126,7 @@ const filterByArea = async (area: string) => {
 export {
     filterByCategory,
     filterByMainIngredient,
+    filterByArea,
     getBrowseableListForArea,
     getBrowseableListForCategory,
     getBrowseableListForIngredient,

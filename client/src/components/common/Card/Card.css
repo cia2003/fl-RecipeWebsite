@@ -1,18 +1,30 @@
-.card-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-radius: 5px;
-    background-color: var(--background);
+.card {
+    background-color: white;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
-
-.card-content {
-    display: grid;
-    gap: 15px;
+.card__img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
 }
-
-.card-container[data-variant='variant2'] {
-    flex-direction: row;
+.card:hover {
+    transform: scale(1.05);
+}
+.card__link {
+    display: flex;
+    align-items: center;
+    color: var(--link);
+    text-decoration: none;
+    justify-content: flex-end;
+    padding: 5px 15px 20px 15px;
+}
+.card__link:hover {
+    text-decoration: underline;
+}
+.card-content {
+    padding: 10px 15px 5px 15px;
 }

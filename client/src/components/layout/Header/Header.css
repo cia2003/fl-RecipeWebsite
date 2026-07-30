@@ -1,4 +1,7 @@
 .header-shell {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   border-bottom: 1px solid var(--border);
   background: var(--background);
   box-shadow: var(--shadow);
@@ -8,7 +11,7 @@
 .header-content {
   width: 100%;
   margin: 0 auto;
-  padding: 50px 90px;
+  padding: 20px 90px;
   display: flex;
   justify-content: space-between;
   align-items: center;
