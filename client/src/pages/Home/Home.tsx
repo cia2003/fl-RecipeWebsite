@@ -1,7 +1,7 @@
 import './Home.css'
 import '../../components/common/Card/Card.css'
 
-import { LuSearch, LuDices, LuChevronRight, LuLeaf, LuGlobe, LuCookingPot } from 'react-icons/lu'
+import { LuSearch, LuDices, LuChevronRight, LuLeaf, LuGlobe, LuCookingPot, LuHeart } from 'react-icons/lu'
 import { useHomeMeals } from '../../hooks/useHomeMeals'
 import { useNavigate } from 'react-router-dom'
 
@@ -33,7 +33,7 @@ function Home() {
             </p>
             <div className='search-form-container'>
               <form action="" className='search-form'>
-                <input type="text" placeholder='Search for a recipe, ingredient, or dish...' className='search-input text-medium-body'/>
+                <input type="text" placeholder='Search recipe by name' className='search-input text-medium-body'/>
                 <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
               </form>
             </div>            
@@ -50,7 +50,7 @@ function Home() {
               <p className='text-medium-body'>Get inspired by a recommended selection of meals.</p>
             </div>
           </div>
-          <a href="/recipes" className='text-medium-body home-section__link'>See more recipes <LuChevronRight /></a>
+          <a href="/explore" className='text-medium-body home-section__link'>See more recipes <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
           {
@@ -62,7 +62,8 @@ function Home() {
                         <p className='text-medium-body text-bold'>{meal.title}</p>
                         <p className='text-base-body'>{meal.country}</p>
                     </div>
-                    <p className='text-base-body tag'>{meal.category}</p>
+                    <p className='text-base-body tag card-tag'>{meal.category}</p>
+                    <LuHeart size={30} className='favorite-logo' onClick={() => navigate("/")} />
                 </article>
               )
             })
@@ -79,7 +80,7 @@ function Home() {
               <p className='text-medium-body'>Quickly find recipes by meal category.</p>
             </div>
           </div>
-          <a href="/recipes" className='text-medium-body home-section__link'>View All Categories <LuChevronRight /></a>
+          <a href="/explore" className='text-medium-body home-section__link'>View All Categories <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
           {
@@ -87,7 +88,7 @@ function Home() {
               return (
                 <article className='card' onClick={() => navigate('/recipes')}>
                     <img src={category.img} alt={category.name} className='card__img' />
-                    <p className='text-base-body tag'>{category.name}</p>
+                    <p className='text-base-body tag card-tag'>{category.name}</p>
                 </article>
               )
             })
@@ -116,7 +117,7 @@ function Home() {
               <p className='text-medium-body'>Find recipes using your favorite ingredients.</p>
             </div>
           </div>
-          <a href="/recipes" className='text-medium-body home-section__link'>View All Ingredients <LuChevronRight /></a>
+          <a href="/explore" className='text-medium-body home-section__link'>View All Ingredients <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
           {
@@ -124,7 +125,7 @@ function Home() {
               return (
                 <article className='card' onClick={() => navigate('/recipes')}>
                     <img src={ingredient.img} alt={ingredient.name} className='card__img' />
-                    <p className='text-base-body tag'>{ingredient.name}</p>
+                    <p className='text-base-body tag card-tag'>{ingredient.name}</p>
                 </article>
               )
             })
@@ -141,7 +142,7 @@ function Home() {
               <p className='text-medium-body'>Explore recipes from cuisines around the world.</p>
             </div>
           </div>
-          <a href="/recipes" className='text-medium-body home-section__link'>View All Cuisines <LuChevronRight /></a>
+          <a href="/explore" className='text-medium-body home-section__link'>View All Cuisines <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
           {
@@ -149,7 +150,7 @@ function Home() {
               return (
                 <article className='card' onClick={() => navigate('/recipes')}>
                     <img src={landmark.img} alt={landmark.name} className='card__img' />
-                    <p className='text-base-body tag'>{landmark.country}</p>
+                    <p className='text-base-body tag card-tag'>{landmark.country}</p>
                 </article>
               )
             })
@@ -164,7 +165,7 @@ function Home() {
             <p className='text-xl-title'>Want to explore more recipes?</p>
             <p className='text-medium-body'>Browse our fill collection and find the perfect meal for any occasion.</p>            
           </div>
-          <Button variant='primary'>EXPLORE ALL RECIPES <LuChevronRight /></Button>
+          <Button variant='primary' onClick={() => navigate('/explore')}>EXPLORE ALL RECIPES <LuChevronRight /></Button>
         </div>
         
       </section>

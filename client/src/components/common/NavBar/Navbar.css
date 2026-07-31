@@ -49,3 +49,6 @@
     display: flex;
     gap: 10px;
 }
+.activeNav {
+    color: var(--main);
+}

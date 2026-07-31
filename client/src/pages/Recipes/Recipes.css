@@ -19,9 +19,9 @@
     align-items: center;
     gap: 10px;
 }
-.tag-container, .filter-warning-container {
+/* .tag-container, .filter-warning-container {
     padding: 10px 15px;
-}
+} */
 .tag-filter {
     display: flex;
     align-items: center;

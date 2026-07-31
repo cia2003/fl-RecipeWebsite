@@ -18,6 +18,10 @@
   --border: #E8C9B8;
   --shadow: rgba(0, 0, 0, 0.08) 0 10px 25px -10px;
 
+  --main-danger: #B3402D;
+  --main-warning: #C98A3E;
+  --main-success: #5F7A5A;
+
   --font-title: 'Fraunces', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
 

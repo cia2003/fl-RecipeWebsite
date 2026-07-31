@@ -106,6 +106,8 @@
   color: var(--background);
   border-radius: 5px;
   padding: 2px 10px;
+}
+.card-tag {
   position: absolute;
   top: 5px;
   left: 5px;
@@ -154,4 +156,17 @@
 .explore-section__text-container {
   display: grid;
   gap: 10px;
+}
+.favorite-logo {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease-in-out;
+}
+.favorite-logo:hover {
+  transform: scale(1.2);
 }

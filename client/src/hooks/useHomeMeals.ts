@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useMeals } from "./useMeals";
 import type { MealCard, CategoryCard, IngredientCard  } from "../types/meal.types";
 import landmarks from "../data/landmark";
+import { getBrowseableListForCategory } from "../services/mealService";
 
 
 export function useHomeMeals() {
     const [randomMeals, setRandomMeals] = useState<MealCard[]>([])
     const [browserableIngredient, setBrowserableIngredient] = useState<IngredientCard[]>([])
     const [browserableCategory, setBrowserableCategory] = useState<CategoryCard[]>([])
+    const [allBrowserableCategory, setAllBrowserableCategory] = useState<CategoryCard[]>([])
 
     const { getRandomMeals,  getBrowserableListOfMainIngredients, getListOfCategories, isLoading } = useMeals()
 
@@ -54,11 +56,27 @@ export function useHomeMeals() {
 
     }, [getBrowserableListOfMainIngredients])
 
+    useEffect(() => {
+        let cancelled = false
+
+        void getListOfCategories(0, -1).then((ingredients) => {
+            if (!cancelled && ingredients) {
+                setAllBrowserableCategory(ingredients)
+            } 
+        })
+
+        return () => {
+            cancelled = true
+        }
+
+    }, [getListOfCategories])
+
 
     return {
         randomMeals, 
         browserableIngredient, 
         browserableCategory,
+        allBrowserableCategory,
         isLoading
     }
 }
