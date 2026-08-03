@@ -53,3 +53,40 @@ export interface CategoriesResponse {
 export interface IngredientsResponse {
   meals: Ingredient[]
 }
+
+export interface AreaCard {
+  name: string
+  country: string
+}
+
+export interface Area {
+  strArea: string
+  strCountry: string
+}
+
+export interface Country {
+  strCountry: string
+}
+
+export interface CountryCard {
+  name: string
+}
+
+export interface AreasResponse {
+  meals: Area[]
+}
+
+export interface RecipeTotal {
+    name: string
+    total: number
+}
+
+export interface AlphabetGroup {
+    alphabet: string
+    recipes: RecipeTotal[]
+}
+
+export interface AlphabetListProps {
+    data: AlphabetGroup[]
+    
+}

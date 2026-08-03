@@ -135,10 +135,20 @@ body {
   line-height: var(--line-height-base-desktop);
 }
 
+.text-xs-body {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: var(--line-height-xs);
+}
+
 .text-color-main {
   color: var(--main);
 }
 
 .text-bold {
   font-weight: 700;
+}
+
+.text-gray {
+  color: #7b7b7b;
 }

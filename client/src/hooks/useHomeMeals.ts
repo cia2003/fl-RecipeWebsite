@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { useMeals } from "./useMeals";
-import type { MealCard, CategoryCard, IngredientCard  } from "../types/meal.types";
-import landmarks from "../data/landmark";
-import { getBrowseableListForCategory } from "../services/mealService";
+import type { MealCard, CategoryCard, IngredientCard, RecipeTotal, AlphabetGroup  } from "../types/meal.types"
 
 
 export function useHomeMeals() {
     const [randomMeals, setRandomMeals] = useState<MealCard[]>([])
     const [browserableIngredient, setBrowserableIngredient] = useState<IngredientCard[]>([])
     const [browserableCategory, setBrowserableCategory] = useState<CategoryCard[]>([])
-    const [allBrowserableCategory, setAllBrowserableCategory] = useState<CategoryCard[]>([])
 
-    const { getRandomMeals,  getBrowserableListOfMainIngredients, getListOfCategories, isLoading } = useMeals()
+    const { 
+        getRandomMeals,  
+        getListOfCategories, 
+        getBrowserableListOfMainIngredients,
+        isLoading
+    } = useMeals()
 
     useEffect(() => {
         let cancelled = false
@@ -47,36 +49,18 @@ export function useHomeMeals() {
         void getBrowserableListOfMainIngredients(0, 5).then((ingredients) => {
             if (!cancelled && ingredients) {
                 setBrowserableIngredient(ingredients)
-            } 
+            }
         })
 
         return () => {
             cancelled = true
         }
-
     }, [getBrowserableListOfMainIngredients])
-
-    useEffect(() => {
-        let cancelled = false
-
-        void getListOfCategories(0, -1).then((ingredients) => {
-            if (!cancelled && ingredients) {
-                setAllBrowserableCategory(ingredients)
-            } 
-        })
-
-        return () => {
-            cancelled = true
-        }
-
-    }, [getListOfCategories])
-
 
     return {
         randomMeals, 
         browserableIngredient, 
         browserableCategory,
-        allBrowserableCategory,
         isLoading
     }
 }

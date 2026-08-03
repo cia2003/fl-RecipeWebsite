@@ -14,7 +14,7 @@ function CategoryGrid({ data, navigation }: CategoryGridProps) {
             {
                 data?.map((item) => {
                 return (
-                    <article className='card' onClick={() => navigate(navigation)}>
+                    <article className='card' onClick={() => console.log(`${item.name} clicked`)} key={`category-card-${item.name}`}>
                         <img src={item.img} alt={item.name} className='card__img' />
                         <p className='text-base-body tag card-tag'>{item.name}</p>
                     </article>

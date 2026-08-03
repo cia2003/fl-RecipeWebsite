@@ -13,7 +13,7 @@ import RandomMealBackgroundImage from "../../assets/images/random-meals-home.png
 import landmarks from '../../data/landmark'
 
 function Home() {
-  const { randomMeals, browserableCategory, browserableIngredient } = useHomeMeals()
+  const { randomMeals, browserableCategory, browserableIngredient, isLoading } = useHomeMeals()
   const navigate = useNavigate()
 
   return (
@@ -53,10 +53,11 @@ function Home() {
           <a href="/explore" className='text-medium-body home-section__link'>See more recipes <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
+          {isLoading && <p>Loading...</p>}
           {
             randomMeals.map((meal) => {
               return (
-                <article className='card' onClick={() => navigate('/recipes')}>
+                <article className='card' key={meal.id} onClick={() => navigate('/recipes')}>
                     <img src={meal.img} alt={meal.title} className='card__img' />
                     <div className='card-content'>
                         <p className='text-medium-body text-bold'>{meal.title}</p>
@@ -83,10 +84,11 @@ function Home() {
           <a href="/explore" className='text-medium-body home-section__link'>View All Categories <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
+          {isLoading && <p>Loading...</p>}
           {
             browserableCategory.map((category) => {
               return (
-                <article className='card' onClick={() => navigate('/recipes')}>
+                <article className='card' key={category.name} onClick={() => navigate('/recipes')}>
                     <img src={category.img} alt={category.name} className='card__img' />
                     <p className='text-base-body tag card-tag'>{category.name}</p>
                 </article>
@@ -120,10 +122,11 @@ function Home() {
           <a href="/explore" className='text-medium-body home-section__link'>View All Ingredients <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
+          {isLoading && <p>Loading...</p>}
           {
             browserableIngredient.map((ingredient) => {
               return (
-                <article className='card' onClick={() => navigate('/recipes')}>
+                <article className='card' key={ingredient.name} onClick={() => navigate('/recipes')}>
                     <img src={ingredient.img} alt={ingredient.name} className='card__img' />
                     <p className='text-base-body tag card-tag'>{ingredient.name}</p>
                 </article>
@@ -148,7 +151,7 @@ function Home() {
           {
             landmarks.map((landmark) => {
               return (
-                <article className='card' onClick={() => navigate('/recipes')}>
+                <article className='card' key={landmark.name} onClick={() => navigate('/recipes')}>
                     <img src={landmark.img} alt={landmark.name} className='card__img' />
                     <p className='text-base-body tag card-tag'>{landmark.country}</p>
                 </article>

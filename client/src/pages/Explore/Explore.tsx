@@ -3,10 +3,9 @@ import '../Home/Home.css'
 import '../Recipes/Recipes.css'
 // import HeroImage from '../../assets/images/hero-section-home.jpg'
 import HeroImage from '../../assets/images/explorePage/explore-page-bg.jpg'
-import { LuSearch, LuArrowRight } from 'react-icons/lu'
+import { LuSearch } from 'react-icons/lu'
 import { useState } from 'react'
 import searchingTypes from '../../data/searchingType'
-import { useHomeMeals } from '../../hooks/useHomeMeals'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -14,17 +13,20 @@ import landmarks from '../../data/landmark'
 
 import CategoryGrid from './BrowseList/CategoryGrid'
 import AlphabetList from './BrowseList/AlphabetList'
+import { useExploreMeals } from '../../hooks/useExploreMeals'
 
 
 
 
 function Explore() {
-    const { allBrowserableCategory } = useHomeMeals()
+    const { allBrowserableCategory, groupedAlphabet } = useExploreMeals()
     const [chosenType, setChosenType] = useState('category')
+
     const alphabets = Array.from({ length: 26 }, (_, i) =>
     String.fromCharCode(65 + i)
     );
     const navigate = useNavigate()
+
     return (
         <article className='explore-page'>
             <section className='hero-section'>
@@ -77,7 +79,7 @@ function Explore() {
                         {
                             searchingTypes.map((type) => {
                                 return (
-                                    <div className='text-medium-body text-bold tab-item' onClick={() => navigate("/")}>
+                                    <div className='text-medium-body text-bold tab-item' key={`search-card-${type.name}`} onClick={() => setChosenType(type.name)}>
                                         <type.icon />
                                         {type.title}
                                     </div>
@@ -89,8 +91,22 @@ function Explore() {
                     <div className='explore-hub-section__body browse-container'>
                         <div className='browse-header-container'>
                             <div className='browse-header__text-container'>
-                                <h3 className='text-large-title'>Browse by Cuisine</h3>
-                                <p className='text-medium-body'>Choose a category to see delicious recipes.</p>                                
+                                {
+                                    searchingTypes.map((type) => {
+                                        return (
+                                            chosenType === type.name
+                                                ? (
+                                                    <>
+                                                        <h3 className='text-large-title text-bold'>{type.title}</h3>
+                                                        <p className='text-medium-body'>{type.altDescription}</p>
+                                                    </>
+                                                
+                                            )
+                                                : null
+                                        )
+                                    }
+                                    )
+                                }                            
                             </div>
                             <div className='mini-search-container'>
                                 <input type="text" placeholder='search category' className='mini-search-input text-medium-body' />
@@ -100,7 +116,7 @@ function Explore() {
 
                         {
                             chosenType !== "category"
-                                ?<div className=''>
+                                ? <div className='inner-browse-container'>
                                     <div className='type-container'>
                                         <h4 className='text-medium-body text-bold'>Popular Cuisines</h4>
                                         <div className='tag-container'>
@@ -133,10 +149,11 @@ function Explore() {
                         }
 
                         <div className='browse-body-container'>
-                            {
+                            { 
+                                
                                 chosenType === "category"
                                     ? <CategoryGrid data={allBrowserableCategory} navigation='/' />
-                                    : <CategoryGrid data={allBrowserableCategory} navigation='/' />
+                                    : <AlphabetList data={groupedAlphabet} />
                             }
                         </div>
                     </div>                    

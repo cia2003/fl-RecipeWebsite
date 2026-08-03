@@ -114,9 +114,13 @@ const filterByCategory = async (category: string) => {
 
 const filterByArea = async (area: string) => {
     try {
-        const response = await fetch(`${URL}filter.php?a=${area}`)
-        const data = await response.json()
-        return data
+        const response = await fetch(`${URL}filter.php?a=${encodeURIComponent(area)}`)
+
+        if (!response.ok) {
+            throw new Error(`Unable to filter meals by area: ${response.status}`)
+        }
+
+        return await response.json()
     } catch (error) {
         console.error('Error fetching meal data:', error)
         throw error

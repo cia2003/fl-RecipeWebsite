@@ -1,5 +1,8 @@
 import { useCallback, useState } from "react";
 import type {
+    Area,
+    AreaCard,
+    AreasResponse,
   CategoriesResponse,
   Category,
   CategoryCard,
@@ -17,7 +20,8 @@ import {
   filterByMainIngredient, 
   filterByArea, 
   getBrowseableListForCategory, 
-  getBrowseableListForIngredient
+  getBrowseableListForIngredient,
+  getBrowseableListForArea
 } from '../services/mealService'
 
 
@@ -135,7 +139,19 @@ export function useMeals() {
         })
     }, [runMealRequest]
     )
-    
+
+    const getBrowserableListOfAreas = useCallback (() => {
+        return runMealRequest(async () => {
+            const response = await getBrowseableListForArea() as AreasResponse
+            const toAreaCard = (area: Area): AreaCard => ({
+                name: area.strArea,
+                country: area.strCountry
+            })
+            const areas = response.meals.map((toAreaCard))
+            return areas
+        })
+    }, [runMealRequest])
+
     const getMealsByArea = useCallback(
         (area: string, startSlice: number, endSlice: number) => {
     return runMealRequest(async () => {
@@ -178,11 +194,45 @@ export function useMeals() {
         [runMealRequest]
     )
 
+    const getTotalMealsByArea = useCallback(
+        (area: string) => {
+    return runMealRequest(async () => {
+            const response = await filterByArea(area) as MealsResponse
+
+            if (response.meals === null) {
+                return 0
+            }
+            const totalMeals = response.meals.length
+            return totalMeals
+            })
+        },
+        [runMealRequest]
+    )
+
+    const getTotalMealsByMainIngredient = useCallback(
+        (mainIngredient: string) => {
+    return runMealRequest(async () => {
+            const response = await filterByMainIngredient(mainIngredient) as MealsResponse
+            
+            if (response.meals === null) {
+                return 0
+            }
+            const totalMeals = response.meals.length
+            return totalMeals
+            })
+        },
+        [runMealRequest]
+    )
+    
+
     return {
         getRandomMeals, 
         getMealsByCategory, 
         getListOfCategories,
         getBrowserableListOfMainIngredients,
+        getBrowserableListOfAreas,
+        getTotalMealsByArea,
+        getTotalMealsByMainIngredient,
         isLoading
     }
 }

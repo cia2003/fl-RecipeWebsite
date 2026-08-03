@@ -1,18 +1,7 @@
-import { LuArrowRight } from 'react-icons/lu'
+import { LuArrowRight, LuChevronDown } from 'react-icons/lu'
+import type { AlphabetListProps } from '../../../types/meal.types'
 
-type Recipe = {
-    name: string
-    total: string
-}
 
-type AlphabetGroup = {
-    alphabet: string
-    totalMeals: Recipe[]
-}
-
-type AlphabetListProps = {
-    data: AlphabetGroup[]
-}
 
 function AlphabetList({ data }: AlphabetListProps) {
     return (
@@ -20,15 +9,15 @@ function AlphabetList({ data }: AlphabetListProps) {
             {
                 data?.map((item) => {
                     return (
-                        <div className='detail-alphabet-list' key={item.alphabet}>
+                        <div className='detail-alphabet-list'>
                             <span className='detail-alphabet-item text-medium-body text-bold'>{item.alphabet}</span>
                             <div className='type-item-list'>
                                 {
-                                    item.totalMeals?.map((recipe) => {
+                                    item.recipes?.map((recipe) => {
                                         return (
-                                            <div className='type-item-container' key={recipe.name}>
+                                            <div className='type-item-container' onClick={() => console.log(`Clicked on ${recipe.name}`)}>
                                                 <p className='text-medium-body text-bold type-item__title-text'>{recipe.name}</p>
-                                                <span className='text-medium-body'>{recipe.total}</span>
+                                                <span className='text-base-body text-gray'>{recipe.total} Recipes</span>
                                                 <span><LuArrowRight /></span>
                                             </div>                                             
                                         )
@@ -36,13 +25,12 @@ function AlphabetList({ data }: AlphabetListProps) {
                                 }
                               
                             </div>
-
                         </div>                          
                     )
                 })
             }
-  
-                                        
+
+            <button className='text-medium-body load-more-button' onClick={() => console.log("clicked!")}>Load More <LuChevronDown /></button>                           
         </div>
     )
 }
