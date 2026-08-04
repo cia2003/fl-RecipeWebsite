@@ -1,135 +1,92 @@
-import type {
-    CategoryCard,
-    AlphabetGroup, 
-    CountryCard,
-    AreaCard,
-    RecipeTotal
-} from "../types/meal.types"
+import type { ExploreType, MealCard } from "../types/meal.types"
 
-import { useState, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMeals } from "./useMeals";
 
-function groupAlphabet(items: RecipeTotal[]): AlphabetGroup[] {
-    const grouped: Record<string, RecipeTotal[]> = {}
 
-    items.forEach((item) => {
-        const firstLetter = item.name.charAt(0).toUpperCase()
-        if (!grouped[firstLetter]) {
-            grouped[firstLetter] = []
-        }
-        grouped[firstLetter].push(item)
-    })
-
-    return Object.entries(grouped).map(([alphabet, recipes]) => ({ alphabet, recipes }))
+async function getListOfType(
+    functionName: ((name: string) => Promise<any>) | ((startSlice: number, endSlice: number) => Promise<any>),
+    selectedType: ExploreType,
+    setListOfType: (item: any) => void
+) {
+    if (selectedType === 'ingredient') {
+        void (functionName as (startSlice: number, endSlice: number) => Promise<any>)(0, -1).then((item) => {
+            setListOfType((prev: any) => ({
+                ...prev,
+                [selectedType]: item.sort((a: any, b:any) => a.name.localeCompare(b.name))
+            }))
+        })
+    } else {
+        void (functionName as (name: string) => Promise<any>)('').then((item) => {
+            setListOfType((prev: any) => ({
+                ...prev,
+                [selectedType]: item.sort((a: any, b:any) => a.name.localeCompare(b.name))
+            }))
+        })
+    }
 }
 
-export function useExploreMeals() {
-    const PAGE_SIZE = 10
-    const [page, setPage] = useState(0)
+export function useExploreMeals(selectedType: ExploreType) {
+    const [listOfType, setListOfType] = useState<Record<ExploreType, Array<{ name: string }>>>(
+        {
+            category: [],
+            area: [],
+            ingredient: []
+        }
+    )
+    const [cardResult, setCardResult] = useState<MealCard[]>([])
 
-    const [chosenType, setChosenType] = useState('category')
-
-    const [allBrowserableCategory, setAllBrowserableCategory] = useState<CategoryCard[]>([])
-    const [country, setCountry] = useState<CountryCard[]>([])
-    const [displayCountryWithTotal, setDisplayCountryWithTotal] = useState<RecipeTotal[]>([])
-
-    const { 
-        getListOfCategories, 
+    const {
+        getBrowserableListOfCategories,
         getBrowserableListOfAreas,
-        getTotalMealsByArea,
+        getBrowserableListOfMainIngredients,
+        getMealsByCategory,
+        getMealsByArea,
+        getMealsByMainIngredient,
         isLoading
     } = useMeals()
 
-    async function loadNextBatch<T extends { name: string }>(items: T[], functionName: (name: string) => Promise<number | null>): Promise<RecipeTotal[]> {
-        const start = page * PAGE_SIZE
-        const end = start + PAGE_SIZE
-
-        const batch = items.slice(start, end)
-
-        const result = await Promise.all(
-            batch.map(async (item) => {
-                const totalRecipes = (await functionName(item.name)) ?? 0
-                const recipeTotal: RecipeTotal = {
-                    name: item.name,
-                    total: totalRecipes
-                }
-                return recipeTotal
-            })
-        )
-
-        setDisplayCountryWithTotal(prev => [
-            ...prev,
-            ...result
-        ])
-        
-        setPage(prev => prev + 1)
-        return result
-    }
-
     useEffect(() => {
-        let cancelled = false
+        if (selectedType === 'category') {
+            getListOfType(getBrowserableListOfCategories, selectedType, setListOfType)
+        } else if (selectedType === 'area') {
+            getListOfType(getBrowserableListOfAreas, selectedType, setListOfType)
+        } else if (selectedType === 'ingredient') {
+            getListOfType(getBrowserableListOfMainIngredients, selectedType, setListOfType)
+        }
+    }, [selectedType, getBrowserableListOfAreas, getBrowserableListOfCategories, getBrowserableListOfMainIngredients])
 
-        void getListOfCategories(0, -1).then((ingredients) => {
-            if (!cancelled && ingredients) {
-                setAllBrowserableCategory(ingredients)
-            } 
-        })
+    const searchMeals = useCallback(async (searchValue: string) => {
+        const trimmedValue = searchValue.trim()
 
-        return () => {
-            cancelled = true
+        if (!trimmedValue) {
+            setCardResult([])
+            return
         }
 
-    }, [getListOfCategories])
+        let meals: MealCard[] | null = []
 
-    useEffect(() => {
-        let cancelled = false
-
-        void getBrowserableListOfAreas().then((areas) => {
-            if (!cancelled && areas) {
-                const toCountryCard = (area: AreaCard): CountryCard => ({
-                    name: area.country
-                })
-
-                const result = areas.map(toCountryCard)
-                setCountry(result)
-            }
-    })
-
-        return () => {
-            cancelled = true
+        if (selectedType === 'category') {
+            meals = await getMealsByCategory(trimmedValue, 0, 6)
+        } else if (selectedType === 'area') {
+            meals = await getMealsByArea(trimmedValue, 0, 6)
+        } else if (selectedType === 'ingredient') {
+            meals = await getMealsByMainIngredient(trimmedValue, 0, 6)
         }
 
-    }, [getBrowserableListOfAreas])
+        setCardResult(meals ?? [])
+    }, [selectedType, getMealsByCategory, getMealsByArea, getMealsByMainIngredient])
 
-    useEffect(() => {
-        let cancelled = false
-
-        async function fetchData() {
-            const totalRecipes = await loadNextBatch(country, getTotalMealsByArea)
-            if (!cancelled) {
-                setDisplayCountryWithTotal((prev) => [...prev, ...totalRecipes])
-                setPage(prev => prev + 1)
-            }
-        }
-
-        void fetchData()
-
-        return () => {
-            cancelled = true
-        }
-    }, [page, country, getTotalMealsByArea])
-
-    const groupedAlphabet = useMemo(() => {
-        const groupedRecipes = groupAlphabet(displayCountryWithTotal)
-        const sortedGroupedRecipes: AlphabetGroup[] = groupedRecipes.sort((a, b) => a.alphabet.localeCompare(b.alphabet))
-
-        return sortedGroupedRecipes
-    }, [displayCountryWithTotal])
+    const memoizedListOfType = useMemo(() => listOfType, [
+        listOfType.category,
+        listOfType.area,
+        listOfType.ingredient
+    ])
 
     return {
-        allBrowserableCategory,
-        groupedAlphabet,
-        loadNextBatch,
+        listOfType: memoizedListOfType,
+        cardResult,
+        searchMeals,
         isLoading
     }
 }

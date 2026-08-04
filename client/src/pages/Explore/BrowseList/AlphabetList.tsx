@@ -1,9 +1,7 @@
 import { LuArrowRight, LuChevronDown } from 'react-icons/lu'
 import type { AlphabetListProps } from '../../../types/meal.types'
 
-
-
-function AlphabetList({ data }: AlphabetListProps) {
+function AlphabetList({ data, onLoadMore, hasMore, isLoading }: AlphabetListProps) {
     return (
         <div className='inner-browse-body-container cuisine-container ingredient-container'>
             {
@@ -30,7 +28,13 @@ function AlphabetList({ data }: AlphabetListProps) {
                 })
             }
 
-            <button className='text-medium-body load-more-button' onClick={() => console.log("clicked!")}>Load More <LuChevronDown /></button>                           
+            {hasMore ? (
+                <button type='button' className='text-medium-body load-more-button' onClick={onLoadMore} disabled={isLoading}>
+                    {isLoading ? 'Loading...' : 'Load More'} <LuChevronDown />
+                </button>
+            ) : (
+                <p className='text-base-body text-gray'>No more items to load.</p>
+            )}
         </div>
     )
 }

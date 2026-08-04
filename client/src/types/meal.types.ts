@@ -28,6 +28,18 @@ export interface CategoryCard {
   description: string
 }
 
+export interface BrowserableCategoryResponse {
+  meals: BrowserableCategory[]
+}
+
+export interface BrowserableCategory {
+  strCategory: string
+}
+
+export interface BrowserableCategoryCard {
+  name: string
+}
+
 export interface Ingredient {
   idIngredient: string
   strIngredient: string
@@ -86,7 +98,11 @@ export interface AlphabetGroup {
     recipes: RecipeTotal[]
 }
 
+export type ExploreType = 'category' | 'area' | 'ingredient'
+
 export interface AlphabetListProps {
     data: AlphabetGroup[]
-    
+    onLoadMore: () => void
+    hasMore: boolean
+    isLoading?: boolean
 }

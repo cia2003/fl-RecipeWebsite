@@ -22,6 +22,17 @@
     background-color: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
+    border-top: 10px solid transparent;
+    transition: all 0.3s ease-in-out;
+}
+.type-card:hover {
+    border-top: 10px solid var(--main);
+    cursor: pointer;
+}
+.type-card--active {
+    border-top: 10px solid var(--main);
+    background-color: #fff8f3;
+    box-shadow: 0 0 8px rgba(193, 97, 61, 0.25);
 }
 .type-card__title-container {
     display: flex;
@@ -68,29 +79,66 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     position: relative;
 }
-.horizontal-rule::after {
-    content: '';
-    position: absolute;
-    border: 1px solid var(--main);
-    width: 35%;
-    left: 30%;
-}
 .browse-section {
     padding-top: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 .browse-container {
     display: grid;
-    gap: 25px;
+    gap: 15px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    /* height: fit-content; */
 }
-.browse-header__text-container {
+.browse-filter-section {
+    grid-column: 1;
+    height: fit-content;
+}
+.browse-result-section {
+    grid-column: 2 / span 2;
     display: grid;
-    gap: 5px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
 }
-.browse-header-container {
+.inner-browse-result-section {
+    grid-column: 1 / span 3;
+    /* border: 1px solid red; */
+    background-color: var(--border);
+    border-radius: 5px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    width: 100%;
+    padding: 100px 0;
+}
+.browse-filter-list {
+    overflow-y: scroll;
+    height: 350px;
+}
+.browse-filter-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
 }
+.browse-filter-item:hover {
+    background-color: var(--border);
+    border-radius: 5px;
+    cursor: pointer;
+}
+.browse-filter-item:active {
+    background-color: #f0e2d8;
+}
+
+
+
 .mini-search-container {
     display: flex;
     position: relative;
@@ -98,77 +146,17 @@
     justify-content: flex-end;
 }
 .mini-search-input {
-    padding: 5px 10px;
+    width: 100%;
+    padding: 10px 5px 10px 35px;
 }
 .mini-search-logo {
     position: absolute;
-    right: 10px;
+    left: 10px;
 }
-.browse-body-container {
-    padding: 20px 0;
-    /* height: 25vw;
-    overflow-y: scroll; */
-}
-.inner-browse-container {
-    display: grid;
-    gap: 20px;
-}
-.inner-browse-body-container {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 20px;
-}
+
 .type-container {
     display: grid;
     gap: 5px;
-}
-.popular-tag {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: var(--border);
-    color: black;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-.popular-tag:hover {
-    transform: scale(1.03);
-    background-color: var(--main);
-    color: white;
-}
-.alphabet-list {
-    display: grid;
-    grid-template-columns: repeat(18, 1fr);
-    gap: 10px;
-}
-.alphabet-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-    aspect-ratio: 1;
-}
-.alphabet-item:hover {
-    transform: scale(1.1);
-}
-.detail-alphabet-list {
-    display: grid;
-    grid-template-columns: 50px 1fr;
-    grid-template-rows: repeat(2, 1fr);
-    gap: 15px;
-    width: 100%;
-}
-.detail-alphabet-item {
-    padding: 10px;
-    background-color: var(--border);
-    align-items: center;
-    text-align: center;
-    aspect-ratio: 1;
-    border-radius: 5px;
 }
 .type-item-list {
     display: grid;
@@ -193,10 +181,6 @@
 .type-item__title-text {
     grid-row: 1;
 }
-.cuisine-container, .ingredient-container {
-    grid-template-columns: auto;
-    gap: 50px;
-}
 .load-more-button {
     background-color: transparent;
     border: none;
@@ -209,5 +193,23 @@
 .load-more-button:hover {
     text-decoration: underline;
     color: var(--main);
+    cursor: pointer;
+}
+.meal-result-section__title-container {
+    grid-column: 1 / span 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.all-recipes-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--main);
+    transition: all 0.3s ease-in-out;
+}
+.all-recipes-link:hover {
+    text-decoration: underline;
     cursor: pointer;
 }

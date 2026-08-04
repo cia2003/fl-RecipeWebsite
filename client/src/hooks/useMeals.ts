@@ -3,6 +3,9 @@ import type {
     Area,
     AreaCard,
     AreasResponse,
+  BrowserableCategory,
+  BrowserableCategoryCard,
+  BrowserableCategoryResponse,
   CategoriesResponse,
   Category,
   CategoryCard,
@@ -107,14 +110,11 @@ export function useMeals() {
 
     const getBrowserableListOfCategories = useCallback (() => {
         return runMealRequest(async () => {
-            const response = await getBrowseableListForCategory() as CategoriesResponse
-            const toCategoryCard = (category: Category): CategoryCard => ({
-                id: category.idCategory,
+            const response = await getBrowseableListForCategory() as BrowserableCategoryResponse
+            const toCategoryCard = (category: BrowserableCategory): BrowserableCategoryCard => ({
                 name: category.strCategory,
-                img: category.strCategoryThumb,
-                description: category.strCategoryDescription
             })
-            const categories = response.categories.map((toCategoryCard))
+            const categories = response.meals.map((toCategoryCard))
 
             return categories
 
@@ -227,8 +227,11 @@ export function useMeals() {
 
     return {
         getRandomMeals, 
-        getMealsByCategory, 
+        getMealsByCategory,
+        getMealsByArea,
+        getMealsByMainIngredient,
         getListOfCategories,
+        getBrowserableListOfCategories,
         getBrowserableListOfMainIngredients,
         getBrowserableListOfAreas,
         getTotalMealsByArea,

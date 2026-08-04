@@ -5,12 +5,18 @@
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    display: grid;
+    align-content: start;
+    overflow: hidden;
+    min-width: 0;
 }
 .card__img {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
+    display: block;
     border-radius: 10px 10px 0 0;
+    flex-shrink: 0;
 }
 .card:hover {
     transform: scale(1.05);
@@ -28,4 +34,6 @@
 }
 .card-content {
     padding: 10px 15px 5px 15px;
+    display: grid;
+    gap: 4px;
 }
