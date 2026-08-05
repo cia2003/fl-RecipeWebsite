@@ -5,7 +5,7 @@ const Footer = () => (
   <footer className="footer-shell">
     <div className='footer-content'>
       <div className='footer-contact-section'>
-        <h2 className='text-3xl-title'>Meal's Recipe</h2>
+        <h2 className='text-3xl-title'>Meal's <span className='text-color-main'>Recipe</span></h2>
 
         <div>
           <p className='text-large-body'>This is a simple recipe's app to search for meal</p>

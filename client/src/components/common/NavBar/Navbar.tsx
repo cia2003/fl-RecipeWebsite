@@ -7,7 +7,7 @@ function Navbar() {
     
     return (
     <nav className="nav-container">
-        <p className="text-large-title">Meal's <span className='text-color-main'>Recipe</span></p>
+        <a href='/' className="text-large-title logo-link">Meal's <span className='text-color-main'>Recipe</span></a>
         <div className="nav-section">
             <div className='nav-link-container'>
                 <a className={`nav-link text-medium-body ${linkName === 'explore' ? '.activeNav' : ''}`} href="/explore" onClick={() => setLinkName('explore')}>Explore</a>

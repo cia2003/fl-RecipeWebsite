@@ -38,3 +38,16 @@
 .button[data-variant='secondary']:hover {
   text-decoration: underline;
 }
+
+.button[data-variant='success'] {
+  background-color: var(--background);
+  color: var(--main-success);
+  border: 1px solid var(--main-success);
+}
+
+.button[data-variant='success']:hover {
+  background-color: var(--main-success);
+  color: var(--background);
+  border: 1px solid var(--main-success);
+}
+

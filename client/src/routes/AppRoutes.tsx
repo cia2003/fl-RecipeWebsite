@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Home from '../pages/Home/Home'
 import Recipes from '../pages/Recipes/Recipes'
@@ -8,8 +8,13 @@ export default function AppRoutes() {
     return (
         <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/recipes' element={<Recipes />} />
+            <Route path="/home" element={<Navigate to="/" replace />} />
+
+            <Route path='/:origin/results' element={<Recipes />} />
+
             <Route path='/explore' element={<Explore />} />
+
+            {/* <Route path='/' /> */}
         </Routes>
     )
 }

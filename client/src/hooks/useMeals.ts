@@ -24,7 +24,8 @@ import {
   filterByArea, 
   getBrowseableListForCategory, 
   getBrowseableListForIngredient,
-  getBrowseableListForArea
+  getBrowseableListForArea,
+  searchMealByName
 } from '../services/mealService'
 
 
@@ -45,6 +46,23 @@ export function useMeals() {
     }, [])
 
     // useMeals.ts
+    const getMealByName = useCallback((name: string) => {
+        return runMealRequest(async () => {
+            const response = await searchMealByName(name) as MealsResponse
+            const toMealCard = (meal: Meal): MealCard => ({
+                id: meal.idMeal,
+                title: meal.strMeal,
+                img: meal.strMealThumb,
+                category: meal.strCategory, 
+                country: meal.strCountry
+            })
+            const meals =  response.meals
+                .map((toMealCard))
+            
+            return meals
+        })
+    }, [runMealRequest])
+
     const getRandomMeals = useCallback((numData: number) => {
     return runMealRequest(async () => {
         const meals: MealCard[] = []
@@ -71,7 +89,7 @@ export function useMeals() {
     }, [runMealRequest])
 
     const getMealsByCategory = useCallback(
-        (category: string, startSlice: number, endSlice: number) => {
+        (category: string, startSlice?: number, endSlice?: number) => {
     return runMealRequest(async () => {
             const response = await filterByCategory(category) as MealsResponse
             const toMealCard = (meal: Meal): MealCard => ({
@@ -82,16 +100,21 @@ export function useMeals() {
                 country: meal.strCountry
             })
             const meals =  response.meals
-                .slice(startSlice, endSlice)
                 .map((toMealCard))
+
+            const pageSlice = 
+                typeof startSlice === 'number' || typeof endSlice === 'number'
+                ? meals.slice(startSlice, endSlice)
+                : meals
+
             
-            return meals
+            return pageSlice
             })
         }, 
         [runMealRequest]
     )
 
-    const getListOfCategories = useCallback ((startSlice: number, endSlice:number) => {
+    const getListOfCategories = useCallback ((startSlice?: number, endSlice?:number) => {
         return runMealRequest(async () => {
             const response = await listAllMealCategories() as CategoriesResponse
             const toCategoryCard = (category: Category): CategoryCard => ({
@@ -100,9 +123,16 @@ export function useMeals() {
                 img: category.strCategoryThumb,
                 description: category.strCategoryDescription
             })
-            const categories = response.categories.slice(startSlice, endSlice).map((toCategoryCard))
+            const categories = response.categories
+                .map((toCategoryCard))
 
-            return categories
+            const pageSlice = 
+                typeof startSlice === 'number' || typeof endSlice === 'number'
+                ? categories.slice(startSlice, endSlice)
+                : categories
+
+            
+            return pageSlice
 
         })
     }, [runMealRequest]
@@ -123,7 +153,7 @@ export function useMeals() {
     )
 
 
-    const getBrowserableListOfMainIngredients = useCallback ((startSlice: number, endSlice: number) => {
+    const getBrowserableListOfMainIngredients = useCallback ((startSlice?: number, endSlice?: number) => {
         return runMealRequest(async () => {
             const response = await getBrowseableListForIngredient() as IngredientsResponse
             const toIngredientCard = (ingredient: Ingredient): IngredientCard => ({
@@ -132,9 +162,16 @@ export function useMeals() {
                 img: ingredient.strThumb,
                 description: ingredient.strDescription
             })
-            const ingredients = response.meals.slice(startSlice, endSlice).map((toIngredientCard))
+            const ingredients = response.meals
+                .map((toIngredientCard))
             
-            return ingredients
+            const pageSlice = 
+                typeof startSlice === 'number' || typeof endSlice === 'number'
+                ? ingredients.slice(startSlice, endSlice)
+                : ingredients
+
+            
+            return pageSlice
 
         })
     }, [runMealRequest]
@@ -153,7 +190,7 @@ export function useMeals() {
     }, [runMealRequest])
 
     const getMealsByArea = useCallback(
-        (area: string, startSlice: number, endSlice: number) => {
+        (area: string, startSlice?: number, endSlice?: number) => {
     return runMealRequest(async () => {
             const response = await filterByArea(area) as MealsResponse
             const toMealCard = (meal: Meal): MealCard => ({
@@ -164,17 +201,22 @@ export function useMeals() {
                 country: meal.strCountry
             })
             const meals =  response.meals
-                .slice(startSlice, endSlice)
                 .map((toMealCard))
             
-            return meals
+            const pageSlice = 
+                typeof startSlice === 'number' || typeof endSlice === 'number'
+                ? meals.slice(startSlice, endSlice)
+                : meals
+
+            
+            return pageSlice
             })
         }, 
         [runMealRequest]
     )
 
     const getMealsByMainIngredient = useCallback(
-        (mainIngredient: string, startSlice: number, endSlice: number) => {
+        (mainIngredient: string, startSlice?: number, endSlice?: number) => {
     return runMealRequest(async () => {
             const response = await filterByMainIngredient(mainIngredient) as MealsResponse
             const toMealCard = (meal: Meal): MealCard => ({
@@ -185,10 +227,15 @@ export function useMeals() {
                 country: meal.strCountry
             })
             const meals =  response.meals
-                .slice(startSlice, endSlice)
                 .map((toMealCard))
             
-            return meals
+            const pageSlice = 
+                typeof startSlice === 'number' || typeof endSlice === 'number'
+                ? meals.slice(startSlice, endSlice)
+                : meals
+
+            
+            return pageSlice
             })
         }, 
         [runMealRequest]
@@ -236,6 +283,7 @@ export function useMeals() {
         getBrowserableListOfAreas,
         getTotalMealsByArea,
         getTotalMealsByMainIngredient,
+        getMealByName,
         isLoading
     }
 }

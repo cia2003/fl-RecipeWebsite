@@ -3,20 +3,25 @@ import '../Home/Home.css'
 import '../Recipes/Recipes.css'
 import HeroImage from '../../assets/images/explorePage/explore-page-bg.jpg'
 import { LuChevronRight, LuSearch, LuHeart } from 'react-icons/lu'
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import searchingTypes from '../../data/searchingType'
 import type { ExploreType } from '../../types/meal.types'
 import { useExploreMeals } from '../../hooks/useExploreMeals'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 function Explore() {
+    const [searchParams] = useSearchParams()
     const [chosenType, setChosenType] = useState<ExploreType>('category')
     const [searchValue, setSearchValue] = useState('')
     const [hasSearched, setHasSearched] = useState(false)
-    const [filterText, setFilterText] = useState('')
-    const { listOfType, cardResult, searchMeals } = useExploreMeals(chosenType)
-
+    const [filterText, setFilterText] = useState('')    
+    const [keyword, setKeyword] = useState('')
+    
     const navigate = useNavigate()
+    const searchType = searchParams.get('type') || 'category'
+
+
+    const { listOfType, cardResult, searchMeals } = useExploreMeals(chosenType)
 
     const handleSelectItem = (itemName: string) => {
         setSearchValue(itemName)
@@ -38,6 +43,18 @@ function Explore() {
         return item.name.toLowerCase().includes(query)
     })
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault
+
+        if (!keyword.trim()) return
+
+        navigate(`/explore/results?type=name&q=${keyword}`)
+    }
+
+    useEffect(() => {
+        setChosenType(searchType as ExploreType)
+    }, [searchType])
+
     return (
         <article className='explore-page'>
             <section className='hero-section'>
@@ -50,7 +67,13 @@ function Explore() {
                         <p className='text-large-body'>
                             Lookup for your favorite meals <br />
                             by seeing through category, cuisine, and main ingredient
-                        </p>          
+                        </p> 
+                        <div className='search-form-container'>
+                            <form onSubmit={handleSubmit} onChange={(e) => setKeyword(e.target.value)} className='search-form'>
+                                <input type="text" placeholder='Search recipe by name' className='search-input text-medium-body'/>
+                                <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
+                            </form>
+                        </div>          
                     </div>
                 </div>
             </section>
@@ -139,15 +162,15 @@ function Explore() {
                     ) : (
                         <>
                             <div className='meal-result-section__title-container'>
-                                <p className='text-large-body text-bold'>Review Meals Recipes</p>
+                                <p className='text-large-body text-bold'>Review {searchValue} Recipes</p>
                                 <div className='all-recipes-link'>
-                                    <p className='text-medium-body text-bold'>See all {cardResult.length} recipes</p>
+                                    <p className='text-medium-body text-bold' onClick={() => navigate(`/explore/results?type=${chosenType}&q=${searchValue}`)}>See all recipes</p>
                                     <LuChevronRight />
                                 </div>                        
                             </div>
 
                             {cardResult.map((meal) => (
-                                <article className='card' key={meal.id} onClick={() => navigate('/recipes')}>
+                                <article className='card' key={meal.id} onClick={() => console.log(meal.title)}>
                                     <img src={meal.img} alt={meal.title} className='card__img' />
                                     <div className='card-content'>
                                         <p className='text-medium-body text-bold'>{meal.title}</p>

@@ -1,118 +1,146 @@
-import './Recipes.css'
-import { LuX, LuMessageCircleWarning, LuChevronDown, LuChevronUp, LuChevronRight,LuChevronLeft, LuAlbum, LuSearch } from 'react-icons/lu'
+import '../Recipes/Recipes.css'
+import '../Explore/Explore.css'
+import HeroImage from '../../assets/images/explorePage/explore-page-bg.jpg'
+import NotFoundRecipe from '../../assets/images/not-found-img.png'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { LuHeart, LuChevronLeft, LuChevronRight, LuCheck, LuSearch } from 'react-icons/lu'
+import useRecipesMeals from '../../hooks/useRecipesMeals'
+import { useEffect, useState } from 'react'
 import Button from '../../components/common/Button/Button'
 
 function Recipes() {
+    const navigate = useNavigate()
+    const { origin } = useParams()
+    const [searchParams] = useSearchParams()
+    const [page, setPage] = useState(1)
+    const [keyword, setKeyword] = useState('')
+
+    const searchType = searchParams.get('type') || ''
+    const query = searchParams.get('q') || ''
+    const { recipes, loading, hasNext, totalPage } = useRecipesMeals(searchType, query, origin, page)
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault
+
+        if (!keyword.trim()) return
+
+        // navigate(`/explore/results?type=name&q=${keyword}`)
+        console.log(`/${origin}/results?type=name&q=${keyword}`)
+    }
+
+    useEffect(() => {
+        setPage(1)
+    }, [searchType, query, origin])
+
     return (
-        <article className="recipes-page">
+        <article className='recipes-page'>
+            <section className='hero-section'>
+                <img src={HeroImage} alt="hero-image-page" className='hero-img' />
+                <div className='hero-content'>
+                    <div className='hero-inner-content'>
+                        {/** Breadcrumbs: show origin (home/explore) then the query or search type */}
+                        <div className='text-base-body'>
+                            <a href={`/${origin}`} className='breadcrumbs-link'>
+                            {origin
+                                ? origin.charAt(0).toUpperCase() + origin.slice(1)
+                                : 'Direct'}                                
+                            </a>
+
+                            <span>
+                            {' > '}
+                            </span>
+
+                            <a href={`/${origin}/results?type=$q=${query}`} className='breadcrumbs-link'>
+                                {query || searchType || 'all'}
+                            </a>
+                            
+                        </div>
+                        <h1 className='text-2xl-title'>
+                            {query || "Not Found Any"} Recipes
+                        </h1>
+                        <div className='search-form-container' id='search-form'>
+                            <form onSubmit={handleSubmit} onChange={(e) => setKeyword(e.target.value)} className='search-form'>
+                                <input type="text" placeholder='Search recipe by name' className='search-input text-medium-body'/>
+                                <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
+                            </form>
+                        </div> 
+                    </div>
+                </div>
+            </section>
+
             <section className='recipes-section'>
-                <div className="section-header">
-                    <h2 className="text-xl-title" style={{ whiteSpace: 'nowrap' }}>
-                        Find your recipe here
-                    </h2>
-                    <div className="horizontal-rule"></div>
-                </div>
-                <div className='search-form-container'>
-                    <form action="" className='search-form'>
-                        <input type="text" placeholder='Search for a recipe, ingredient, or dish...' className='search-input text-medium-body'/>
-                        <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
-                    </form>
-                </div> 
-
-                <div className='active-filter-container'>
-                    <div className='tag-container'>
-                        <p className='text-large-body'>Active Filter: </p>
-                        <div className=''></div>
-                        <span className='tag-filter text-base-body'>Category: Seafood <button type='button' className='btn-icon'><LuX /></button> </span>
-                    </div>
-                    <div className='filter-warning-container'>
-                        <span className='text-base-body filter-warning'><LuMessageCircleWarning /> Only one filter type can be active at a time. Choose another filter to replace the current one</span>
-                    </div>
-                </div>
-
-                <div className='recipes-content'>
-                    <div className='recipes-content-filter'>
-                        <p className='text-large-body'>Filter By</p>
-                        <div className='dropdown-menu'>
-                            <div className='dropdown-menu-container'><span className='text-base-body dropdown-logo'><LuAlbum /> Category</span> <LuChevronDown /> </div>
-                        </div>
-                        <div className='dropdown-menu'>
-                            <div className='dropdown-menu-container'><span className='text-base-body dropdown-logo'><LuAlbum /> Cuisine Area</span> <LuChevronDown /> </div>
-                        </div>
-                        <div className='dropdown-menu'>
-                            <div className='dropdown-menu-container'><span className='text-base-body dropdown-logo'><LuAlbum /> Main Ingredient</span> <LuChevronUp /> </div>
-                            <div className='radio-group'>
-                                <div className='radio-item'>
-                                    <input type="radio" id='id1' name='main-ingredient' />
-                                    <label htmlFor="id1">Radio 1</label><br />                              
+                <h2 className={`text-medium-body text-gray ${recipes.length === 0 ? 'hide-element' : ''}`}>{loading ? 'Loading...' : `${recipes.length} Recipe(s) Found`}</h2>
+                <div className='recipes-result-container'>
+                    {
+                    
+                    recipes.length === 0
+                        ?   <div className='not-found-recipe-container'>
+                                <img src={NotFoundRecipe} alt="not-found-recipe-image" className='not-found-recipe-container__img' />
+                                <div className='not-found-recipe-container__text-container'>
+                                    <h3 className='text-large-title'>No Recipe Found</h3>
+                                    <p className='text-medium-body'>We couldn't find any recipes matching <span className='text--color-red'>"{query}"</span></p>                                    
                                 </div>
-                                <div className='radio-item'>
-                                    <input type="radio" id='id2' name='main-ingredient' />
-                                    <label htmlFor="id2">Radio 2</label><br />                              
+                                <div className='not-found-recipe-container__list'>
+                                    <h3 className='text-medium-title'>Try:</h3>
+                                    <div className='not-found-recipe-container__item'>
+                                        <LuCheck className='not-found-recipe__icon' />
+                                        <p className='text-base-body'>Check your spelling</p>
+                                    </div>
+                                    <div className='not-found-recipe-container__item'>
+                                        <LuCheck className='not-found-recipe__icon' />
+                                        <p className='text-base-body'>Search another ingredient</p>
+                                    </div>
+                                    <div className='not-found-recipe-container__item'>
+                                        <LuCheck className='not-found-recipe__icon' />
+                                        <p className='text-base-body'>Browse categories</p>
+                                    </div>
                                 </div>
-                                <button className='extended-button'>See More</button>
-                            </div>
-                        </div>
-                    </div>
+                                <div className='not-found-recipe-container__button-container'>
+                                    <Button variant='primary' onClick={() => navigate('/explore')}>Explore Recipes</Button>
+                                </div>
 
-                    <div className='recipes-card-container'>
-                        <div className='text-medium-body search-title-text'>Seafood Recipe <span className='text-medium-body'>(x results)</span></div>
-                        <article className='meal-card'>
-                            <img src="https://th.bing.com/th/id/OIP.nFIK7s8trKlrI9N-7SQbCgHaLH?w=188&h=282&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3" alt="" className='meal-card__img' />
-                            <div className='meal-card-content'>
-                                <p className='text-large-body'>Grilled Salmon</p>
-                                <p className='text-base-body'>Japan</p>
                             </div>
-                            <a href="#" className='meal-card__link text-base-body'>See the recipe <LuChevronRight /></a>
-                        </article>
-                        <article className='meal-card'>
-                            <img src="https://th.bing.com/th/id/OIP.nFIK7s8trKlrI9N-7SQbCgHaLH?w=188&h=282&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3" alt="" className='meal-card__img' />
-                            <div className='meal-card-content'>
-                                <p className='text-large-body'>Grilled Salmon</p>
-                                <p className='text-base-body'>Japan</p>
-                            </div>
-                            <a href="#" className='meal-card__link text-base-body'>See the recipe <LuChevronRight /></a>
-                        </article>
-                        <article className='meal-card'>
-                            <img src="https://th.bing.com/th/id/OIP.nFIK7s8trKlrI9N-7SQbCgHaLH?w=188&h=282&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3" alt="" className='meal-card__img' />
-                            <div className='meal-card-content'>
-                                <p className='text-large-body'>Grilled Salmon</p>
-                                <p className='text-base-body'>Japan</p>
-                            </div>
-                            <a href="#" className='meal-card__link text-base-body'>See the recipe <LuChevronRight /></a>
-                        </article>
-                        <article className='meal-card'>
-                            <img src="https://th.bing.com/th/id/OIP.nFIK7s8trKlrI9N-7SQbCgHaLH?w=188&h=282&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3" alt="" className='meal-card__img' />
-                            <div className='meal-card-content'>
-                                <p className='text-large-body'>Grilled Salmon</p>
-                                <p className='text-base-body'>Japan</p>
-                            </div>
-                            <a href="#" className='meal-card__link text-base-body'>See the recipe <LuChevronRight /></a>
-                        </article>
-                        <article className='meal-card'>
-                            <img src="https://th.bing.com/th/id/OIP.nFIK7s8trKlrI9N-7SQbCgHaLH?w=188&h=282&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3" alt="" className='meal-card__img' />
-                            <div className='meal-card-content'>
-                                <p className='text-large-body'>Grilled Salmon</p>
-                                <p className='text-base-body'>Japan</p>
-                            </div>
-                            <a href="#" className='meal-card__link text-base-body'>See the recipe <LuChevronRight /></a>
-                        </article>
-                        <article className='meal-card'>
-                            <img src="https://th.bing.com/th/id/OIP.nFIK7s8trKlrI9N-7SQbCgHaLH?w=188&h=282&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3" alt="" className='meal-card__img' />
-                            <div className='meal-card-content'>
-                                <p className='text-large-body'>Grilled Salmon</p>
-                                <p className='text-base-body'>Japan</p>
-                            </div>
-                            <a href="#" className='meal-card__link text-base-body'>See the recipe <LuChevronRight /></a>
-                        </article>
-                    </div>
-                    <div className='page-track-container'>
-                        <LuChevronLeft />
-                        <div>
-                            <input type="number" className='page-number' />/20
-                        </div>
-                        <LuChevronRight />
-                    </div>
+                        :   recipes.map((r) => (
+                            <article
+                                key={r.id}
+                                className='card'
+                                onClick={() => {
+                                    // navigate to detail page — adapt path to your routes
+                                    if (r.id) navigate(`/detail/${r.id}`)
+                                }}
+                            >
+                                <img src={r.img} className='card__img' />
+                                <div className='card-content'>
+                                    <p className='text-medium-body text-bold'>{r.title}</p>
+                                    <p className='text-base-body'>{r.country}</p>
+                                </div>
+                                <LuHeart
+                                    size={30}
+                                    className='favorite-logo'
+                                    onClick={(event) => {
+                                        event.stopPropagation()
+                                        // add favorite handling
+                                    }}
+                                />
+                            </article>
+                        ))}
+                </div>
+                <div className={`page-container ${recipes.length === 0 ? 'hide-element' : '' }`}>
+                    <LuChevronLeft
+                        className={`page-icon ${page === 1 ? 'disabled' : ''}`}
+                        onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                        size={25}
+                    />
+                    <p className='text-base-body'>
+                        <span className='text-bold'>{page}</span> of {totalPage}
+                    </p>
+                    <LuChevronRight
+                        className={`page-icon ${!hasNext ? '' : ''}`}
+                        onClick={() => {
+                            if (hasNext) setPage((prev) => prev + 1)
+                        }}
+                        size={25}
+                    />
                 </div>
             </section>
         </article>

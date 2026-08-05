@@ -52,3 +52,7 @@
 .activeNav {
     color: var(--main);
 }
+.logo-link {
+    text-decoration: none;
+    color: var(--text);
+}
