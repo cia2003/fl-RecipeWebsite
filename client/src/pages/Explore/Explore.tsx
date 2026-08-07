@@ -18,7 +18,7 @@ function Explore() {
     const [keyword, setKeyword] = useState('')
     
     const navigate = useNavigate()
-    const searchType = searchParams.get('type') || 'category'
+    const searchType = searchParams.get('t') || 'category'
 
 
     const { listOfType, cardResult, searchMeals } = useExploreMeals(chosenType)
@@ -44,11 +44,12 @@ function Explore() {
     })
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault
+        e.preventDefault()
 
-        if (!keyword.trim()) return
+        const trimmedKeyword = keyword.trim()
+        if (!trimmedKeyword) return
 
-        navigate(`/explore/results?type=name&q=${keyword}`)
+        navigate(`/explore/results?q=${encodeURIComponent(trimmedKeyword)}`)
     }
 
     useEffect(() => {
@@ -69,8 +70,14 @@ function Explore() {
                             by seeing through category, cuisine, and main ingredient
                         </p> 
                         <div className='search-form-container'>
-                            <form onSubmit={handleSubmit} onChange={(e) => setKeyword(e.target.value)} className='search-form'>
-                                <input type="text" placeholder='Search recipe by name' className='search-input text-medium-body'/>
+                            <form onSubmit={handleSubmit} className='search-form'>
+                                <input
+                                    type="text"
+                                    value={keyword}
+                                    onChange={(e) => setKeyword(e.target.value)}
+                                    placeholder='Search recipe by name'
+                                    className='search-input text-medium-body'
+                                />
                                 <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
                             </form>
                         </div>          
@@ -164,13 +171,13 @@ function Explore() {
                             <div className='meal-result-section__title-container'>
                                 <p className='text-large-body text-bold'>Review {searchValue} Recipes</p>
                                 <div className='all-recipes-link'>
-                                    <p className='text-medium-body text-bold' onClick={() => navigate(`/explore/results?type=${chosenType}&q=${searchValue}`)}>See all recipes</p>
+                                    <p className='text-medium-body text-bold' onClick={() => navigate(`/explore/results?t=${chosenType}&q=${searchValue}`)}>See all recipes</p>
                                     <LuChevronRight />
                                 </div>                        
                             </div>
 
                             {cardResult.map((meal) => (
-                                <article className='card' key={meal.id} onClick={() => console.log(meal.title)}>
+                                <article className='card' key={meal.id} onClick={() => navigate(`/detail-recipe?id=${meal.id}`)}>
                                     <img src={meal.img} alt={meal.title} className='card__img' />
                                     <div className='card-content'>
                                         <p className='text-medium-body text-bold'>{meal.title}</p>

@@ -33,13 +33,13 @@
 }
 .hero-content {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr 1fr;
   padding: 100px 0;
   color: var(--background);
 }
 .hero-inner-content {
   display: grid;
-  margin: 0 90px;
+  margin: 0 0 0 90px;
   gap: 25px;
   color: var(--background);
 }

@@ -5,6 +5,7 @@ import type { MealCard, CategoryCard, IngredientCard, RecipeTotal, AlphabetGroup
 
 export function useHomeMeals() {
     const [randomMeals, setRandomMeals] = useState<MealCard[]>([])
+    const [singleRandomMeal, setSingleRandomMeal] = useState<MealCard[]>([])
     const [browserableIngredient, setBrowserableIngredient] = useState<IngredientCard[]>([])
     const [browserableCategory, setBrowserableCategory] = useState<CategoryCard[]>([])
 
@@ -57,10 +58,25 @@ export function useHomeMeals() {
         }
     }, [getBrowserableListOfMainIngredients])
 
+    useEffect(() => {
+        let cancelled = false
+
+        void getRandomMeals(1).then((meal) => {
+            if (!cancelled && meal) {
+                setSingleRandomMeal(meal)
+            }
+        })
+
+        return () => {
+            cancelled
+        }
+    }, [getRandomMeals])
+
     return {
         randomMeals, 
         browserableIngredient, 
         browserableCategory,
+        singleRandomMeal,
         isLoading
     }
 }

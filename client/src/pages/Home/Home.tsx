@@ -15,7 +15,7 @@ import { useState } from 'react'
 
 function Home() {
   const [keyword, setKeyword] = useState('')
-  const { randomMeals, browserableCategory, browserableIngredient, isLoading } = useHomeMeals()
+  const { randomMeals, singleRandomMeal, browserableCategory, browserableIngredient, isLoading } = useHomeMeals()
   const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,7 +23,7 @@ function Home() {
 
     if (!keyword.trim()) return
 
-    navigate(`/home/results?type=name&q=${keyword}`)
+    navigate(`/home/results?q=${keyword}`)
   }
 
   return (
@@ -67,7 +67,7 @@ function Home() {
           {
             randomMeals.map((meal) => {
               return (
-                <article className='card' key={meal.id} onClick={() => console.log(meal.title)}>
+                <article className='card' key={meal.id} onClick={() => navigate(`/detail-recipe?id=${meal.id}`)}>
                     <img src={meal.img} alt={meal.title} className='card__img' />
                     <div className='card-content'>
                         <p className='text-medium-body text-bold'>{meal.title}</p>
@@ -91,14 +91,14 @@ function Home() {
               <p className='text-medium-body'>Quickly find recipes by meal category.</p>
             </div>
           </div>
-          <a href="/explore?type=category" className='text-medium-body home-section__link'>View All Categories <LuChevronRight /></a>
+          <a href="/explore?t=category" className='text-medium-body home-section__link'>View All Categories <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
           {isLoading && <p>Loading...</p>}
           {
             browserableCategory.map((category) => {
               return (
-                <article className='card' key={category.name} onClick={() => navigate(`/home/results?type=category&q=${category.name}`)}>
+                <article className='card' key={category.name} onClick={() => navigate(`/home/results?t=category&q=${category.name}`)}>
                     <img src={category.img} alt={category.name} className='card__img' />
                     <p className='text-base-body tag card-tag'>{category.name}</p>
                 </article>
@@ -115,7 +115,7 @@ function Home() {
             <p className='text-xl-title'>Still confused about what to eat today?</p>
             <p className='text-medium-body'>Discover a random recipe and get inspired for your next meal.</p>            
           </div>
-          <Button variant='primary'>SURPRISE ME!</Button>
+          <Button variant='primary' onClick={() => navigate(`/detail-recipe?id=${singleRandomMeal[0].id}`)}>SURPRISE ME!</Button>
         </div>
         
       </section>
@@ -129,14 +129,14 @@ function Home() {
               <p className='text-medium-body'>Find recipes using your favorite ingredients.</p>
             </div>
           </div>
-          <a href="/explore?type=ingredient" className='text-medium-body home-section__link'>View All Ingredients <LuChevronRight /></a>
+          <a href="/explore?t=ingredient" className='text-medium-body home-section__link'>View All Ingredients <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
           {isLoading && <p>Loading...</p>}
           {
             browserableIngredient.map((ingredient) => {
               return (
-                <article className='card' key={ingredient.name} onClick={() => navigate(`/home/results?type=ingredient&q=${ingredient.name}`)}>
+                <article className='card' key={ingredient.name} onClick={() => navigate(`/home/results?t=ingredient&q=${ingredient.name}`)}>
                     <img src={ingredient.img} alt={ingredient.name} className='card__img' />
                     <p className='text-base-body tag card-tag'>{ingredient.name}</p>
                 </article>
@@ -155,13 +155,13 @@ function Home() {
               <p className='text-medium-body'>Explore recipes from cuisines around the world.</p>
             </div>
           </div>
-          <a href="/explore?type=area" className='text-medium-body home-section__link'>View All Cuisines <LuChevronRight /></a>
+          <a href="/explore?t=area" className='text-medium-body home-section__link'>View All Cuisines <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
           {
             landmarks.map((landmark) => {
               return (
-                <article className='card' key={landmark.name} onClick={() => navigate(`/home/results?type=country&q=${landmark.country}`)}>
+                <article className='card' key={landmark.name} onClick={() => navigate(`/home/results?t=country&q=${landmark.country}`)}>
                     <img src={landmark.img} alt={landmark.name} className='card__img' />
                     <p className='text-base-body tag card-tag'>{landmark.country}</p>
                 </article>

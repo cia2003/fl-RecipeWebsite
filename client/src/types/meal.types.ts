@@ -66,6 +66,58 @@ export interface IngredientsResponse {
   meals: Ingredient[]
 }
 
+// template literal types
+type IngredientKey = `strIngredient${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`
+type MeasureKey = `strMeasure${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`
+
+export interface DetailRecipe
+  extends Record<IngredientKey, string | null>, 
+  Record<MeasureKey, string | null> {
+  idMeal: string
+  strMeal: string
+  strMealAlternate: string
+
+  strCategory: string
+  strArea: string
+  strCountry: string
+
+  strInstructions: string
+  strMealThumb: string
+  strTags: string | null;
+  strYoutube: string;
+
+  strSource: string | null;
+  strImageSource: string | null;
+  strCreativeCommonsConfirmed: string | null;
+  dateModified: string | null;
+}
+
+export interface DetailRecipeIngredient {
+  name: string
+  measure?: string
+}
+
+export interface DetailRecipeCard {
+  id: string
+  name: string
+  category: string
+  area: string
+  country: string
+
+  thumbnail: string
+
+  tags: string[]
+
+  youtube: string
+  instructions: string[]
+
+  ingredients: DetailRecipeIngredient[]
+}
+
+export interface DetailRecipeResponse {
+  meals: DetailRecipe[]
+}
+
 export interface AreaCard {
   name: string
   country: string

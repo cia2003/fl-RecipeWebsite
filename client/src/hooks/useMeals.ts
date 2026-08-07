@@ -15,9 +15,14 @@ import type {
   Meal,
   MealCard,
   MealsResponse,
+  DetailRecipeResponse, 
+  DetailRecipe, 
+  DetailRecipeCard, 
+  DetailRecipeIngredient
 } from "../types/meal.types";
 import {
   lookupSingleRandomMeal,
+  lookupMealById,
   filterByCategory,
   listAllMealCategories, 
   filterByMainIngredient, 
@@ -46,6 +51,55 @@ export function useMeals() {
     }, [])
 
     // useMeals.ts
+    const getMealById = useCallback((id: string) => {
+        return runMealRequest(async () => {
+            const response = await lookupMealById(id) as DetailRecipeResponse
+            const toDetailRecipeCard = (meal: DetailRecipe): DetailRecipeCard => {
+                const detailRecipeIngredient: DetailRecipeIngredient[] = []
+
+                for (let i = 1; i <= 20; i++) {
+                    const ingredient = meal[`strIngredient${i}` as keyof DetailRecipe]
+                    const measure = meal[`strMeasure${i}` as keyof DetailRecipe]
+
+                    if (
+                        typeof ingredient === "string" &&
+                        ingredient.trim() !== ""
+                    ) {
+                        detailRecipeIngredient.push({
+                            name: ingredient, 
+                            measure: typeof measure === "string"
+                                        ? measure
+                                        : ""
+                        })
+                    }
+                }
+
+                return {
+                id: meal.idMeal, 
+                name: meal.strMeal, 
+                category: meal.strCategory, 
+                area: meal.strArea, 
+                country: meal.strCountry, 
+                thumbnail: meal.strMealThumb, 
+                tags: meal.strTags
+                    ? meal.strTags.split(",").map(tag => tag.trim())
+                    : [],
+                youtube: meal.strYoutube, 
+                instructions: meal.strInstructions
+                                        .split(/\r?\n/)
+                                        .map(step =>
+                                            step.replace(/^(\*?\s*(step\s*\d+[:.)-]?|\d+[.)-]?))\s*/i, "").trim()
+                                        )
+                                        .filter(Boolean), 
+                ingredients: detailRecipeIngredient
+                }
+                
+            }
+
+            return response.meals.map(toDetailRecipeCard)
+        })
+    }, [runMealRequest])
+
     const getMealByName = useCallback((name: string) => {
         return runMealRequest(async () => {
             const response = await searchMealByName(name) as MealsResponse
@@ -284,6 +338,7 @@ export function useMeals() {
         getTotalMealsByArea,
         getTotalMealsByMainIngredient,
         getMealByName,
+        getMealById,
         isLoading
     }
 }

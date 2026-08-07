@@ -1,5 +1,6 @@
 import '../Recipes/Recipes.css'
 import '../Explore/Explore.css'
+import '../Home/Home.css'
 import HeroImage from '../../assets/images/explorePage/explore-page-bg.jpg'
 import NotFoundRecipe from '../../assets/images/not-found-img.png'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -15,17 +16,17 @@ function Recipes() {
     const [page, setPage] = useState(1)
     const [keyword, setKeyword] = useState('')
 
-    const searchType = searchParams.get('type') || ''
+    const searchType = searchParams.get('t') || 'name'
     const query = searchParams.get('q') || ''
     const { recipes, loading, hasNext, totalPage } = useRecipesMeals(searchType, query, origin, page)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault
+        e.preventDefault()
 
-        if (!keyword.trim()) return
+        const trimmedKeyword = keyword.trim()
+        if (!trimmedKeyword) return
 
-        // navigate(`/explore/results?type=name&q=${keyword}`)
-        console.log(`/${origin}/results?type=name&q=${keyword}`)
+        navigate(`/${origin}/results?q=${encodeURIComponent(trimmedKeyword)}`)
     }
 
     useEffect(() => {
@@ -40,27 +41,43 @@ function Recipes() {
                     <div className='hero-inner-content'>
                         {/** Breadcrumbs: show origin (home/explore) then the query or search type */}
                         <div className='text-base-body'>
-                            <a href={`/${origin}`} className='breadcrumbs-link'>
-                            {origin
-                                ? origin.charAt(0).toUpperCase() + origin.slice(1)
-                                : 'Direct'}                                
-                            </a>
+                            {
+                                recipes.length === 0
+                                    ? ''
+                                    : <div>
+                                        <a href={`/${origin}`} className='breadcrumbs-link'>
+                                        {origin
+                                            ? origin.charAt(0).toUpperCase() + origin.slice(1)
+                                            : 'Direct'}                                
+                                        </a>
 
-                            <span>
-                            {' > '}
-                            </span>
+                                        <span>
+                                        {' > '}
+                                        </span>
 
-                            <a href={`/${origin}/results?type=$q=${query}`} className='breadcrumbs-link'>
-                                {query || searchType || 'all'}
-                            </a>
+                                        <a href={`/${origin}/results?type=$q=${query}`} className='breadcrumbs-link'>
+                                            {query || searchType || 'all'}
+                                        </a>
+                                    </div>
+                            }
+
                             
                         </div>
                         <h1 className='text-2xl-title'>
-                            {query || "Not Found Any"} Recipes
+                            {
+                            recipes.length === 0
+                                ? "Not Found Any"
+                                : query} Recipes
                         </h1>
                         <div className='search-form-container' id='search-form'>
-                            <form onSubmit={handleSubmit} onChange={(e) => setKeyword(e.target.value)} className='search-form'>
-                                <input type="text" placeholder='Search recipe by name' className='search-input text-medium-body'/>
+                            <form onSubmit={handleSubmit} className='search-form'>
+                                <input
+                                    type="text"
+                                    value={keyword}
+                                    onChange={(e) => setKeyword(e.target.value)}
+                                    placeholder='Search recipe by name'
+                                    className='search-input text-medium-body'
+                                />
                                 <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
                             </form>
                         </div> 
@@ -106,7 +123,7 @@ function Recipes() {
                                 className='card'
                                 onClick={() => {
                                     // navigate to detail page — adapt path to your routes
-                                    if (r.id) navigate(`/detail/${r.id}`)
+                                    if (r.id) navigate(`/detail-recipe?id=${r.id}`)
                                 }}
                             >
                                 <img src={r.img} className='card__img' />
