@@ -1,0 +1,101 @@
+.about-page {
+    padding: 100px 90px;
+}
+
+.about-section {
+    display: grid;
+    gap: 50px;
+}
+.about-section__header {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 25px;
+}
+.about-section__header__text-container {
+    text-align: justify;
+    display: grid;
+    gap: 10px;
+}
+.feature-container {
+    display: grid;
+    gap: 5px;
+    grid-column: 1;
+    grid-row: 2;
+}
+.feature-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+.feature-item {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    max-height: 500px;
+}
+.feature-icon {
+    justify-self: center;
+}
+.about-section__header__img-container {
+    max-width: 700px;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+}
+.about-section__header__img {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    gap: 50px;
+    width: 100%;
+}
+.about-section__card-list {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+}
+.about-section__card-item-container {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    text-align: justify;
+    gap: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) 
+}
+.about-section__card-item {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    text-align: justify;
+    gap: 10px;
+    height: fit-content;
+}
+.about-section__card-icon {
+    background-color: var(--main-success);
+    border-radius: 50%;
+    padding: 8px;
+    color: white;
+}
+.about-section__card-item__text-container {
+    display: grid;
+}
+.about-section__additional-info-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    background-color: var(--main-warning-disabled);
+    padding: 10px;
+    align-items: center;
+    border: 3px solid var(--main-warning) ;
+    border-radius: 5px;
+}
+.text-color--main {
+    color: var(--main);
+}

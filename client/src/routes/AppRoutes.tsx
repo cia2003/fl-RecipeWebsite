@@ -4,6 +4,9 @@ import Home from '../pages/Home/Home'
 import Recipes from '../pages/Recipes/Recipes'
 import Explore from '../pages/Explore/Explore'
 import { DetailRecipe } from '../pages/DetailRecipe/DetailRecipe'
+import { About } from '../pages/About/About'
+import { Contact } from '../pages/Contact/Contact'
+import { Favorite } from '../pages/Favorite/Favorite'
 
 export default function AppRoutes() {
     return (
@@ -16,6 +19,11 @@ export default function AppRoutes() {
             <Route path='/explore' element={<Explore />} />
 
             <Route path='/detail-recipe' element={<DetailRecipe />}/>
+
+            <Route path='/about' element={<About />} />
+            <Route path='/contact' element={<Contact />} />
+
+            <Route path='/favorite' element={<Favorite />} />
         </Routes>
     )
 }

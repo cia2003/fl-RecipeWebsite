@@ -1,0 +1,93 @@
+.contact-page {
+    padding: 100px 90px;
+}
+
+.contact-section {
+    display: grid;
+    gap: 25px;
+}
+.contact-section__header {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 25px;
+}
+.contact-section__header__text-container {
+    text-align: justify;
+    display: grid;
+    gap: 10px;
+}
+.for-whom-container {
+    display: grid;
+    gap: 5px;
+    grid-column: 1;
+    grid-row: 2;
+}
+.for-whom-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    height: fit-content;
+}
+.for-whom-item {
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+    text-align: justify;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    max-height: 500px;
+
+}
+.for-whom-item__text-container {
+    display: flex;
+    gap: 10px;
+}
+.for-whom-icon {
+    justify-self: center;
+}
+.contact-section__header__img-container {
+    max-width: 700px;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+}
+.contact-section__header__img {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    gap: 50px;
+    width: 100%;
+}
+.reach-out-container {
+    display: grid;
+    gap: 15px;
+}
+.contact-section__card-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) 
+}
+.contact-section__card-item-container {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    text-align: justify;
+    gap: 10px;
+    padding: 15px;
+}
+.contact-section__card-item {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    text-align: justify;
+    gap: 10px;
+    height: fit-content;
+}
+.contact-section__card-icon {
+    background-color: var(--main-success);
+    border-radius: 50%;
+    padding: 8px;
+    color: white;
+}
