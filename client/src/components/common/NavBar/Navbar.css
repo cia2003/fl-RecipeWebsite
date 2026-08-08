@@ -1,9 +1,35 @@
-.nav-container {
+﻿.nav-container {
     width: 100%;
     display: flex;
     align-items: center;
     gap: 30px;
     text-wrap: nowrap;
+    position: relative;
+}
+
+.nav-hamburger {
+    display: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 12px;
+    transition: background 0.2s ease;
+}
+
+.nav-hamburger:hover,
+.nav-hamburger:focus-visible {
+    background: rgba(0, 0, 0, 0.06);
+    outline: none;
+}
+
+.nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    margin: 5px 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .nav-section {
@@ -55,4 +81,73 @@
 .logo-link {
     text-decoration: none;
     color: var(--text);
+}
+
+.nav-mobile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: stretch;
+    border: 1px solid red;
+}
+
+.nav-mobile-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: fit-content;
+    min-width: 280px;
+    max-width: 360px;
+    height: 100vh;
+    padding: 32px 24px;
+    background-color: var(--background);
+    border-right: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 14px 0 40px rgba(0, 0, 0, 0.18);
+    overflow-y: auto;
+}
+
+.nav-mobile-panel::before {
+    content: '';
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+}
+
+.nav-link-container--justify-space-between {
+    justify-content: space-between;
+}
+
+.nav-close-button {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.nav-link-container.mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+@media (max-width: 980px) {
+    .nav-container {
+        justify-content: space-between;
+    }
+    .nav-hamburger {
+        display: inline-flex;
+    }
+
+    .nav-section {
+        display: none;
+    }
 }

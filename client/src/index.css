@@ -7,7 +7,7 @@
 :root {
   --text: #2A2320;
   --background: #FBF7F2;
-  --background-darker: #f4f0eb;
+  --background-darker: #f7f3f0;
 
   --main: #C1613D;
   --main-active: #8F4127;
@@ -19,6 +19,7 @@
   --shadow: rgba(0, 0, 0, 0.08) 0 10px 25px -10px;
 
   --main-danger: #B3402D;
+  --main-danger-disabled: #EAD4B0;
   --main-warning: #C98A3E;
   --main-warning-disabled: #EAD4B0;
   --main-success: #5F7A5A;
@@ -152,4 +153,68 @@ body {
 
 .text-gray {
   color: #7b7b7b;
+}
+
+@media screen and (max-width: 768px) {
+.text-3xl-title {
+  font-family: var(--font-title);
+  font-size: var(--text-4xl-mobile);
+  line-height: var(--line-height-large-mobile);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-2xl-title {
+  font-family: var(--font-title);
+  font-size: var(--text-3xl-mobile);
+  line-height: var(--line-height-xl-mobile);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-xl-title {
+  font-family: var(--font-title);
+  font-size: var(--text-2xl-mobile);
+  line-height: var(--line-height-large-mobile);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-large-title {
+  font-family: var(--font-title);
+  font-size: var(--text-xl-mobile);
+  line-height: var(--line-height-medium-mobile);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-medium-title {
+  font-family: var(--font-title);
+  font-size: var(--text-medium-mobile);
+  line-height: var(--line-height-base-mobile);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-base-title {
+  font-family: var(--font-title);
+  font-size: var(--text-base-mobile);
+  line-height: var(--line-height-xl-mobile);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-large-body {
+  font-family: var(--font-body);
+  font-size: var(--text-large-mobile);
+  line-height: var(--line-height-base-mobile);
+  font-weight: var(--font-weight-medium);
+}
+
+.text-medium-body {
+  font-family: var(--font-body);
+  font-size: var(--text-medium-mobile);
+  line-height: var(--line-height-base-mobile);
+  font-weight: var(--font-weight-medium);
+}
+
+.text-base-body {
+  font-family: var(--font-body);
+  font-size: var(--text-base-mobile);
+  line-height: var(--line-height-base-mobile);
+}
 }

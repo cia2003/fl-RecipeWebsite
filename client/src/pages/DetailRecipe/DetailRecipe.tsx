@@ -1,7 +1,9 @@
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './DetailRecipe.css'
 import { useDetailRecipeMeals } from '../../hooks/useDetailRecipeMeals'
-import { LuYoutube, LuHeart, LuCookingPot, LuGlobe, LuCheck, LuShoppingBag, LuListCheck, LuChevronLeft } from 'react-icons/lu'
+import { LuYoutube, LuCookingPot, LuGlobe, LuCheck, LuShoppingBag, LuListCheck, LuChevronLeft } from 'react-icons/lu'
+import { MealCard } from '../../components/common/MealCard/MealCard'
+import { MealCardSkeleton } from '../../components/common/MealCard/MealCardSkeleton'
 
 export function DetailRecipe() {
     const [searchParams] = useSearchParams()
@@ -9,6 +11,8 @@ export function DetailRecipe() {
 
     const { detailRecipe, topFiveRelatedRecipe, isLoading } = useDetailRecipeMeals(id)
     const navigate = useNavigate()
+
+    console.log(detailRecipe?.[0]?.youtube)
 
     return (
         <article className='detail-recipe-page'>
@@ -45,11 +49,10 @@ export function DetailRecipe() {
                                             </p>
                                         </div>
                                         <div className='detail-recipe-section__button-list'>
-                                            <button className='detail-recipe-section__youtube-button detail-recipe-section__button-item text-base-body' onClick={() => navigate(meal.youtube)}>
-                                                <LuYoutube size={36} className='youtube-icon' />
+                                            <button className={`detail-recipe-section__youtube-button detail-recipe-section__button-item text-base-body ${meal.youtube === "" ? "youtube-button--disabled" : ""}`} disabled={meal.youtube === ""}  onClick={() => navigate(meal.youtube)}>
+                                                <LuYoutube size={36} className={`youtube-icon ${meal.youtube === "" ? 'youtube-icon--disabled' : ''}`} />
                                                 Watch on YouTube
                                             </button>
-                                            <button className='detail-recipe-section__button-item text-base-body text--color-main'><LuHeart className='detail-recipe-section__button-icon' size={24} /> Save the Recipe</button>
                                         </div>
                                     </div>                                    
                                 </div>
@@ -106,19 +109,21 @@ export function DetailRecipe() {
                     <p className='text-large-title'>Related Recipes</p>
                     <div className='related-recipes-container__card-list'>
                         {
-                            topFiveRelatedRecipe.map(
-                                (meal) => {
+                            isLoading ? (
+                                <MealCardSkeleton count={5} />
+                            ) : (
+                                topFiveRelatedRecipe.map((meal) => {
                                     return (
-                                        <article className='card' key={meal.id} onClick={() => navigate(`/detail-recipe?id=${meal.id}`)}>
-                                            <img src={meal.img} alt={meal.title} className='card__img' />
-                                            <div className='card-content'>
-                                                <p className='text-medium-body text-bold'>{meal.title}</p>
-                                                <p className='text-base-body'>{meal.country}</p>
-                                            </div>
-                                            <LuHeart size={30} className='favorite-logo' onClick={() => navigate("/")} />
-                                        </article>
+                                        <MealCard
+                                            key={meal.id}
+                                            img={meal.img}
+                                            alt={meal.title}
+                                            title={meal.title}
+                                            country={meal.country}
+                                            onClick={() => navigate(`/detail-recipe?id=${meal.id}`)}
+                                        />
                                     )
-                                }
+                                })
                             )
                         }                        
                     </div>

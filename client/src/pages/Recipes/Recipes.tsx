@@ -2,36 +2,29 @@ import '../Recipes/Recipes.css'
 import '../Explore/Explore.css'
 import '../Home/Home.css'
 import HeroImage from '../../assets/images/explorePage/explore-page-bg.jpg'
-import NotFoundRecipe from '../../assets/images/not-found-img.png'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { LuHeart, LuChevronLeft, LuChevronRight, LuCheck, LuSearch } from 'react-icons/lu'
-import useRecipesMeals from '../../hooks/useRecipesMeals'
-import { useEffect, useState } from 'react'
+import NotFoundRecipe from '../../assets/images/not-found-img.png' 
+import { LuChevronLeft, LuChevronRight, LuCheck, LuSearch } from 'react-icons/lu'
+import { useRecipes } from '../../hooks/useRecipes'
 import Button from '../../components/common/Button/Button'
+import { MealCard } from '../../components/common/MealCard/MealCard'
+import { MealCardSkeleton } from '../../components/common/MealCard/MealCardSkeleton'
 
 function Recipes() {
-    const navigate = useNavigate()
-    const { origin } = useParams()
-    const [searchParams] = useSearchParams()
-    const [page, setPage] = useState(1)
-    const [keyword, setKeyword] = useState('')
-
-    const searchType = searchParams.get('t') || 'name'
-    const query = searchParams.get('q') || ''
-    const { recipes, loading, hasNext, totalPage } = useRecipesMeals(searchType, query, origin, page)
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
-        const trimmedKeyword = keyword.trim()
-        if (!trimmedKeyword) return
-
-        navigate(`/${origin}/results?q=${encodeURIComponent(trimmedKeyword)}`)
-    }
-
-    useEffect(() => {
-        setPage(1)
-    }, [searchType, query, origin])
+    const {
+        recipes,
+        loading,
+        hasNext,
+        totalPage,
+        page,
+        setPage,
+        keyword,
+        setKeyword,
+        handleSubmit,
+        navigate,
+        searchType,
+        query,
+        origin
+    } = useRecipes()
 
     return (
         <article className='recipes-page'>
@@ -90,7 +83,7 @@ function Recipes() {
                 <div className='recipes-result-container'>
                     {
                     
-                    recipes.length === 0
+                    recipes.length === 0 && !loading
                         ?   <div className='not-found-recipe-container'>
                                 <img src={NotFoundRecipe} alt="not-found-recipe-image" className='not-found-recipe-container__img' />
                                 <div className='not-found-recipe-container__text-container'>
@@ -117,30 +110,22 @@ function Recipes() {
                                 </div>
 
                             </div>
-                        :   recipes.map((r) => (
-                            <article
-                                key={r.id}
-                                className='card'
-                                onClick={() => {
-                                    // navigate to detail page — adapt path to your routes
-                                    if (r.id) navigate(`/detail-recipe?id=${r.id}`)
-                                }}
-                            >
-                                <img src={r.img} className='card__img' />
-                                <div className='card-content'>
-                                    <p className='text-medium-body text-bold'>{r.title}</p>
-                                    <p className='text-base-body'>{r.country}</p>
-                                </div>
-                                <LuHeart
-                                    size={30}
-                                    className='favorite-logo'
-                                    onClick={(event) => {
-                                        event.stopPropagation()
-                                        // add favorite handling
+                        : loading ? (
+                            <MealCardSkeleton count={8} />
+                          ) : (
+                            recipes.map((r) => (
+                                <MealCard
+                                    key={r.id}
+                                    img={r.img}
+                                    alt={r.title}
+                                    title={r.title}
+                                    country={r.country}
+                                    onClick={() => {
+                                        if (r.id) navigate(`/detail-recipe?id=${r.id}`)
                                     }}
                                 />
-                            </article>
-                        ))}
+                            ))
+                          )}
                 </div>
                 <div className={`page-container ${recipes.length === 0 ? 'hide-element' : '' }`}>
                     <LuChevronLeft

@@ -23,7 +23,7 @@ export function useDetailRecipeMeals(id: string) {
         return () => {
             cancelled = true
         }
-    }, [setDetailRecipe])
+    }, [id, setDetailRecipe])
 
     useEffect(() => {
         let cancelled = false
@@ -39,7 +39,7 @@ export function useDetailRecipeMeals(id: string) {
             )            
         }
 
-    }, [detailRecipe, getMealsByCategory])
+    }, [id, detailRecipe, getMealsByCategory])
 
 
     return {

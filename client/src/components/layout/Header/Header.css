@@ -27,3 +27,10 @@
   text-decoration: none;
   margin-left: 20px;
 }
+
+@media screen and (max-width: 980px) {
+  .header-content {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}

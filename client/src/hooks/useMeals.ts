@@ -86,7 +86,7 @@ export function useMeals() {
                     : [],
                 youtube: meal.strYoutube, 
                 instructions: meal.strInstructions
-                                        .split(/\r?\n/)
+                                        .split(/\r?\n▢\r?\n/g)
                                         .map(step =>
                                             step.replace(/^(\*?\s*(step\s*\d+[:.)-]?|\d+[.)-]?))\s*/i, "").trim()
                                         )

@@ -184,3 +184,10 @@
 .horizontal-rule--color-border {
     border: 1px solid var(--border);
 }
+.youtube-button--disabled {
+    cursor: no-drop;
+    background-color: var(--main-danger-disabled);
+}
+.youtube-icon--disabled {
+    color: var(--main-danger-disabled);
+}

@@ -70,10 +70,10 @@
 .tab-item:hover {
     color: var(--main);
 }
-.explore-hub-section__body {
+/* .explore-hub-section__body {
     display: grid;
-    grid-template-columns: repeat(1fr, 5);
-}
+    grid-template-columns: repeat(5, 1fr);
+} */
 .horizontal-rule {
     width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -91,21 +91,20 @@
     background-color: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
-    /* height: fit-content; */
 }
 .browse-filter-section {
     grid-column: 1;
-    height: fit-content;
+    /* height: fit-content; */
 }
 .browse-result-section {
-    grid-column: 2 / span 2;
+    /* grid-column: 2 / span 2; */
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(3, minmax(0, 1fr)); */
     gap: 16px;
 }
 .inner-browse-result-section {
     grid-column: 1 / span 3;
-    /* border: 1px solid red; */
     background-color: var(--border);
     border-radius: 5px;
     display: grid;
@@ -118,7 +117,7 @@
 }
 .browse-filter-list {
     overflow-y: scroll;
-    height: 350px;
+    max-height: 350px;
 }
 .browse-filter-item {
     display: flex;
@@ -136,8 +135,6 @@
 .browse-filter-item:active {
     background-color: #f0e2d8;
 }
-
-
 
 .mini-search-container {
     display: flex;
@@ -208,8 +205,33 @@
     gap: 5px;
     color: var(--main);
     transition: all 0.3s ease-in-out;
+    text-decoration: none;
 }
 .all-recipes-link:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+@media screen and (max-width: 980px) {
+    .explore-hub-section {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+    .browse-section {
+        grid-template-columns: 1fr;
+        grid-template-rows: 350px 1fr;
+    }
+    .browse-filter-section, .browse-result-section {
+        grid-column: 1;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .type-card-container {
+        grid-template-columns: 1fr;
+    }
+    .browse-result-section {
+        /* grid-template-columns: repeat(2, 1fr); */
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }

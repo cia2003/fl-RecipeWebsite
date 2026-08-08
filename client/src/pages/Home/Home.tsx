@@ -1,9 +1,9 @@
 import './Home.css'
-import '../../components/common/Card/Card.css'
+import { MealCard } from '../../components/common/MealCard/MealCard'
+import { MealCardSkeleton } from '../../components/common/MealCard/MealCardSkeleton'
 
-import { LuSearch, LuDices, LuChevronRight, LuLeaf, LuGlobe, LuCookingPot, LuHeart } from 'react-icons/lu'
-import { useHomeMeals } from '../../hooks/useHomeMeals'
-import { useNavigate } from 'react-router-dom'
+import { LuSearch, LuDices, LuChevronRight, LuLeaf, LuGlobe, LuCookingPot } from 'react-icons/lu'
+import { useHome } from '../../hooks/useHome'
 
 import Button from '../../components/common/Button/Button'
 import HeroImage from '../../assets/images/hero-section-home.jpg'
@@ -11,20 +11,20 @@ import ExploreImage from "../../assets/images/explore-section-home.jpg"
 import RandomMealBackgroundImage from "../../assets/images/random-meals-home.png"
 
 import landmarks from '../../data/landmark'
-import { useState } from 'react'
 
 function Home() {
-  const [keyword, setKeyword] = useState('')
-  const { randomMeals, singleRandomMeal, browserableCategory, browserableIngredient, isLoading } = useHomeMeals()
-  const navigate = useNavigate()
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    if (!keyword.trim()) return
-
-    navigate(`/home/results?q=${keyword}`)
-  }
+  const {
+    keyword,
+    setKeyword,
+    randomMeals,
+    singleRandomMeal,
+    browserableCategory,
+    browserableIngredient,
+    isLoading,
+    handleSubmit,
+    goToDetail,
+    goToResults
+  } = useHome()
 
   return (
     <article className="home-page">
@@ -42,8 +42,8 @@ function Home() {
               Find your next favorite meal!
             </p>
             <div className='search-form-container'>
-              <form onSubmit={handleSubmit} onChange={(e) => setKeyword(e.target.value)} className='search-form'>
-                <input type="text" placeholder='Search recipe by name' className='search-input text-medium-body'/>
+              <form onSubmit={handleSubmit} className='search-form'>
+                <input value={keyword} onChange={(e) => setKeyword(e.target.value)} type="text" placeholder='Search recipe by name' className='search-input text-medium-body'/>
                 <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
               </form>
             </div>            
@@ -54,7 +54,6 @@ function Home() {
       <section className='home-section'>
         <div className='home-section__header'>
           <div className='home-section__text-container'>
-            <LuDices size={50} className='home-section__icon' />
             <div className='home-section__inner-text-container'>
               <h2 className='text-large-title'>Recommended Meals</h2>
               <p className='text-medium-body'>Get inspired by a recommended selection of meals.</p>
@@ -63,29 +62,29 @@ function Home() {
           <a href="/explore" className='text-medium-body home-section__link'>See more recipes <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
-          {isLoading && <p>Loading...</p>}
-          {
+          {isLoading ? (
+            <MealCardSkeleton count={5} />
+          ) : (
             randomMeals.map((meal) => {
               return (
-                <article className='card' key={meal.id} onClick={() => navigate(`/detail-recipe?id=${meal.id}`)}>
-                    <img src={meal.img} alt={meal.title} className='card__img' />
-                    <div className='card-content'>
-                        <p className='text-medium-body text-bold'>{meal.title}</p>
-                        <p className='text-base-body'>{meal.country}</p>
-                    </div>
-                    <p className='text-base-body tag card-tag'>{meal.category}</p>
-                    <LuHeart size={30} className='favorite-logo' onClick={() => navigate("/")} />
-                </article>
+                <MealCard
+                  key={meal.id}
+                  img={meal.img}
+                  alt={meal.title}
+                  title={meal.title}
+                  country={meal.country}
+                  tag={meal.category}
+                  onClick={() => goToDetail(meal.id)}
+                />
               )
             })
-          }
+          )}
         </div>
       </section>
 
       <section className='home-section'>
         <div className='home-section__header'>
           <div className='home-section__text-container'>
-            <LuLeaf size={50} className='home-section__icon' />
             <div className='home-section__inner-text-container'>
               <h2 className='text-large-title'>Browse by Category</h2>
               <p className='text-medium-body'>Quickly find recipes by meal category.</p>
@@ -94,28 +93,32 @@ function Home() {
           <a href="/explore?t=category" className='text-medium-body home-section__link'>View All Categories <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
-          {isLoading && <p>Loading...</p>}
-          {
+          {isLoading ? (
+            <MealCardSkeleton count={5} showContent={false} />
+          ) : (
             browserableCategory.map((category) => {
               return (
-                <article className='card' key={category.name} onClick={() => navigate(`/home/results?t=category&q=${category.name}`)}>
-                    <img src={category.img} alt={category.name} className='card__img' />
-                    <p className='text-base-body tag card-tag'>{category.name}</p>
-                </article>
+                <MealCard
+                  key={category.name}
+                  img={category.img}
+                  alt={category.name}
+                  tag={category.name}
+                  onClick={() => goToResults(`/home/results?t=category&q=${category.name}`)}
+                />
               )
             })
-          }
+          )}
         </div>
       </section>
 
       <section className='explore-section'>
         <img src={RandomMealBackgroundImage} alt="explore-image-home" className='explore-section-img' />
-        <div className='explore-section__header'>
+          <div className='explore-section__header'>
           <div className='explore-section__text-container'>
             <p className='text-xl-title'>Still confused about what to eat today?</p>
             <p className='text-medium-body'>Discover a random recipe and get inspired for your next meal.</p>            
           </div>
-          <Button variant='primary' onClick={() => navigate(`/detail-recipe?id=${singleRandomMeal[0].id}`)}>SURPRISE ME!</Button>
+          <Button variant='primary' onClick={() => goToDetail(singleRandomMeal[0]?.id)}>SURPRISE ME!</Button>
         </div>
         
       </section>
@@ -123,7 +126,6 @@ function Home() {
       <section className='home-section'>
         <div className='home-section__header'>
           <div className='home-section__text-container'>
-            <LuCookingPot size={50} className='home-section__icon' />
             <div className='home-section__inner-text-container'>
               <h2 className='text-large-title'>Browse by Main Ingredient</h2>
               <p className='text-medium-body'>Find recipes using your favorite ingredients.</p>
@@ -132,36 +134,39 @@ function Home() {
           <a href="/explore?t=ingredient" className='text-medium-body home-section__link'>View All Ingredients <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
-          {isLoading && <p>Loading...</p>}
-          {
+          {isLoading ? (
+            <MealCardSkeleton count={5} showContent={false} />
+          ) : (
             browserableIngredient.map((ingredient) => {
               return (
-                <article className='card' key={ingredient.name} onClick={() => navigate(`/home/results?t=ingredient&q=${ingredient.name}`)}>
-                    <img src={ingredient.img} alt={ingredient.name} className='card__img' />
-                    <p className='text-base-body tag card-tag'>{ingredient.name}</p>
-                </article>
+                <MealCard
+                  key={ingredient.name}
+                  img={ingredient.img}
+                  alt={ingredient.name}
+                  tag={ingredient.name}
+                  onClick={() => goToResults(`/home/results?t=ingredient&q=${ingredient.name}`)}
+                />
               )
             })
-          }
+          )}
         </div>
       </section>
     
       <section className='home-section'>
         <div className='home-section__header'>
           <div className='home-section__text-container'>
-            <LuGlobe size={50} className='home-section__icon' />
             <div className='home-section__inner-text-container'>
               <h2 className='text-large-title'>Browse by Cuisine (Area)</h2>
               <p className='text-medium-body'>Explore recipes from cuisines around the world.</p>
             </div>
           </div>
-          <a href="/explore?t=area" className='text-medium-body home-section__link'>View All Cuisines <LuChevronRight /></a>
+            <a href="/explore?t=area" className='text-medium-body home-section__link'>View All Cuisines <LuChevronRight /></a>
         </div>
         <div className='home-section__body'>
-          {
+            {
             landmarks.map((landmark) => {
               return (
-                <article className='card' key={landmark.name} onClick={() => navigate(`/home/results?t=country&q=${landmark.country}`)}>
+                <article className='card' key={landmark.name} onClick={() => goToResults(`/home/results?t=country&q=${landmark.country}`)}>
                     <img src={landmark.img} alt={landmark.name} className='card__img' />
                     <p className='text-base-body tag card-tag'>{landmark.country}</p>
                 </article>
@@ -173,12 +178,12 @@ function Home() {
 
       <section className='explore-section'>
         <img src={ExploreImage} alt="explore-image-home" className='explore-section-img' />
-        <div className='explore-section__header'>
+          <div className='explore-section__header'>
           <div className='explore-section__text-container'>
             <p className='text-xl-title'>Want to explore more recipes?</p>
             <p className='text-medium-body'>Browse our fill collection and find the perfect meal for any occasion.</p>            
           </div>
-          <Button variant='primary' onClick={() => navigate('/explore')}>EXPLORE ALL RECIPES <LuChevronRight /></Button>
+          <Button variant='primary' onClick={() => goToResults('/explore')}>EXPLORE ALL RECIPES <LuChevronRight /></Button>
         </div>
         
       </section>

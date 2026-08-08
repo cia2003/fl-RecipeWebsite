@@ -2,59 +2,30 @@ import './Explore.css'
 import '../Home/Home.css'
 import '../Recipes/Recipes.css'
 import HeroImage from '../../assets/images/explorePage/explore-page-bg.jpg'
-import { LuChevronRight, LuSearch, LuHeart } from 'react-icons/lu'
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { LuChevronRight, LuSearch } from 'react-icons/lu'
 import searchingTypes from '../../data/searchingType'
 import type { ExploreType } from '../../types/meal.types'
-import { useExploreMeals } from '../../hooks/useExploreMeals'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useExplore } from '../../hooks/useExplore'
+import { MealCard } from '../../components/common/MealCard/MealCard'
+import { MealCardSkeleton } from '../../components/common/MealCard/MealCardSkeleton'
 
 function Explore() {
-    const [searchParams] = useSearchParams()
-    const [chosenType, setChosenType] = useState<ExploreType>('category')
-    const [searchValue, setSearchValue] = useState('')
-    const [hasSearched, setHasSearched] = useState(false)
-    const [filterText, setFilterText] = useState('')    
-    const [keyword, setKeyword] = useState('')
-    
-    const navigate = useNavigate()
-    const searchType = searchParams.get('t') || 'category'
-
-
-    const { listOfType, cardResult, searchMeals } = useExploreMeals(chosenType)
-
-    const handleSelectItem = (itemName: string) => {
-        setSearchValue(itemName)
-        setHasSearched(true)
-        void searchMeals(itemName)
-    }
-
-    const handleFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setFilterText(event.target.value)
-    }
-
-    const filteredItems = ((listOfType[chosenType] as { name: string }[]) ?? []).filter((item) => {
-        const query = filterText.trim().toLowerCase()
-
-        if (!query) {
-            return true
-        }
-
-        return item.name.toLowerCase().includes(query)
-    })
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
-        const trimmedKeyword = keyword.trim()
-        if (!trimmedKeyword) return
-
-        navigate(`/explore/results?q=${encodeURIComponent(trimmedKeyword)}`)
-    }
-
-    useEffect(() => {
-        setChosenType(searchType as ExploreType)
-    }, [searchType])
+    const {
+        chosenType,
+        setChosenType,
+        searchValue,
+        hasSearched,
+        cardResult,
+        isLoading,
+        filteredItems,
+        handleSelectItem,
+        handleFilterChange,
+        handleSubmit,
+        goToDetail,
+        keyword,
+        setKeyword,
+        filterText
+    } = useExplore()
 
     return (
         <article className='explore-page'>
@@ -150,7 +121,8 @@ function Explore() {
                 </div>
 
                 <div className='browse-result-section browse-container'>
-                    {!hasSearched ? (
+                    {!hasSearched 
+                    ? (
                         <div className='inner-browse-result-section'>
                             <p className='text-large-body text-bold'>Search for a {chosenType}</p>
                             <p className='text-medium-body'>
@@ -158,43 +130,44 @@ function Explore() {
                                 delicious recipes from around the world.
                             </p>
                         </div>
-                    ) : cardResult.length === 0 ? (
-                        <div className='inner-browse-result-section'>
-                            <p className='text-large-body text-bold'>No recipe found.</p>
-                            <p className='text-medium-body'>
-                                We couldn't find any recipes for {searchValue} recipes. <br />
-                                Try another {chosenType}.
-                            </p>
-                        </div>
                     ) : (
                         <>
-                            <div className='meal-result-section__title-container'>
-                                <p className='text-large-body text-bold'>Review {searchValue} Recipes</p>
-                                <div className='all-recipes-link'>
-                                    <p className='text-medium-body text-bold' onClick={() => navigate(`/explore/results?t=${chosenType}&q=${searchValue}`)}>See all recipes</p>
-                                    <LuChevronRight />
-                                </div>                        
+                            <div className='meal-result-section__title-container'>                                 
+                                <p className='text-large-body text-bold'>Review {searchValue} Recipes</p>                                 
+                                <div className='all-recipes-link'>                                     
+                                    <a className='text-medium-body text-bold all-recipes-link' href={`/explore/results?t=${chosenType}&q=${searchValue}`} >See all recipes</a>
+                                    <LuChevronRight />                                 
+                                </div>                                                     
                             </div>
-
-                            {cardResult.map((meal) => (
-                                <article className='card' key={meal.id} onClick={() => navigate(`/detail-recipe?id=${meal.id}`)}>
-                                    <img src={meal.img} alt={meal.title} className='card__img' />
-                                    <div className='card-content'>
-                                        <p className='text-medium-body text-bold'>{meal.title}</p>
-                                        <p className='text-base-body'>{meal.country}</p>
-                                    </div>
-                                    <LuHeart
-                                        size={30}
-                                        className='favorite-logo'
-                                        onClick={(event) => {
-                                            event.stopPropagation()
-                                            navigate('/')
-                                        }}
-                                    />
-                                </article>
-                            ))}
+                        {
+                            isLoading 
+                                ? <MealCardSkeleton count={6} />
+                                : (cardResult.length !== 0
+                                    ? cardResult.map((meal) => {
+                                        return (
+                                            <MealCard
+                                                key={meal.id}
+                                                img={meal.img}
+                                                alt={meal.title}
+                                                title={meal.title}
+                                                country={meal.country}
+                                                onClick={() => goToDetail(meal.id)}
+                                            />                                            
+                                        )
+                                        })
+                                    : <div className='inner-browse-result-section'>
+                                            <p className='text-large-body text-bold'>No recipe found.</p>
+                                            <p className='text-medium-body'>
+                                                We couldn't find any recipes for {searchValue} recipes. <br />
+                                                Try another {chosenType}.
+                                            </p>
+                                        </div>
+                                )
+                        }
+                        
                         </>
-                    )}
+                    )
+                    }
                 </div>
             </section>
         </article>
