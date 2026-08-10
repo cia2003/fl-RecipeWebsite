@@ -63,13 +63,6 @@ export function About() {
                     }
 
                 </div>
-                <div className="about-section__additional-info-container">
-                    <LuLightbulb size={36} />
-                    <p className="text-base-body">
-                        This project is a learning journey to understand how AI can enhance productivity, 
-                        creativity, and problem-solving in building better web applications.
-                    </p>
-                </div>
             </section>
         </article>
     )

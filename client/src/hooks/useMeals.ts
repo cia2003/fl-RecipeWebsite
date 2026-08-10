@@ -86,15 +86,24 @@ export function useMeals() {
                     : [],
                 youtube: meal.strYoutube, 
                 instructions: meal.strInstructions
-                                        .split(/\r?\n▢\r?\n/g)
-                                        .map(step =>
-                                            step.replace(/^(\*?\s*(step\s*\d+[:.)-]?|\d+[.)-]?))\s*/i, "").trim()
-                                        )
-                                        .filter(Boolean), 
+                                    .split("\n").filter(item => item.trim() !== ""),
+                                    // .split(/\r?\n(?=(?:\*?\s*(?:step\s*)?\d+[.)-]?))/gi)
+                                    // .map(step =>
+                                    //     step
+                                    //         .replace(
+                                    //             /^\*?\s*(?:step\s*)?\d+[:.)-]?\s*/i,
+                                    //             ""
+                                    //         )
+                                    //         .trim()
+                                    // )
+                                    // .filter(Boolean),
+
                 ingredients: detailRecipeIngredient
                 }
                 
             }
+
+            console.log(response.meals.map(toDetailRecipeCard))
 
             return response.meals.map(toDetailRecipeCard)
         })

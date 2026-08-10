@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { KeyboardEvent, ReactNode } from 'react'
 import '../../common/Card/Card.css'
 import './MealCard.css'
 
@@ -26,8 +26,27 @@ export function MealCard({
   const hasContent = Boolean(title || country || children)
   const classNames = ['card', className].filter(Boolean).join(' ')
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (!onClick) {
+      return
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onClick()
+    }
+  }
+
   return (
-    <article className={classNames} onClick={onClick}>
+    <article
+      className={classNames}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      role='button'
+      tabIndex={onClick ? 0 : -1}
+      aria-label={title ? `Open recipe ${title}` : 'Open recipe card'}
+      aria-disabled={!onClick}
+    >
       <img src={img} alt={alt ?? title ?? 'meal-thumbnail'} className='card__img' />
 
       {hasContent ? (

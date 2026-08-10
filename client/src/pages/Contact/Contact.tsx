@@ -55,7 +55,7 @@ export function Contact() {
                                         <div className="contact-section__card-item">
                                             <data.icon size={36} className='contact-section__card-icon' />
                                             <div className="contact-section__card-item__text-container">
-                                                <p className="text-base-body">{data.contact}</p>
+                                                <a className="text-base-body contact-section__card-link" href={data.contact}>{data.name}</a>
                                             </div>
                                         </div>                                  
                                     </div>

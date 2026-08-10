@@ -26,7 +26,12 @@
   border: 1px solid var(--main-hover);
 }
 
-.button[data-variant='primary']:focus {
+.button:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.button[data-variant='primary']:focus-visible {
   border: 1px solid var(--text);
 }
 

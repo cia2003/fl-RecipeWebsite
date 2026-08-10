@@ -9,6 +9,7 @@
     align-content: start;
     overflow: hidden;
     min-width: 0;
+    outline: none;
 }
 .card__img {
     width: 100%;
@@ -20,6 +21,11 @@
 }
 .card:hover {
     transform: scale(1.05);
+}
+.card:focus-visible {
+    outline: 2px solid var(--main);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px rgba(193, 97, 61, 0.2), 0 0 5px rgba(0, 0, 0, 0.3);
 }
 .card__link {
     display: flex;

@@ -27,9 +27,9 @@ function Recipes() {
     } = useRecipes()
 
     return (
-        <article className='recipes-page'>
-            <section className='hero-section'>
-                <img src={HeroImage} alt="hero-image-page" className='hero-img' />
+        <main className='recipes-page' role='main'>
+            <section className='hero-section' aria-labelledby='recipes-page-title'>
+                <img src={HeroImage} alt='' aria-hidden='true' className='hero-img' />
                 <div className='hero-content'>
                     <div className='hero-inner-content'>
                         {/** Breadcrumbs: show origin (home/explore) then the query or search type */}
@@ -56,31 +56,33 @@ function Recipes() {
 
                             
                         </div>
-                        <h1 className='text-2xl-title'>
+                        <h1 id='recipes-page-title' className='text-2xl-title'>
                             {
                             recipes.length === 0
                                 ? "Not Found Any"
                                 : query} Recipes
                         </h1>
                         <div className='search-form-container' id='search-form'>
-                            <form onSubmit={handleSubmit} className='search-form'>
+                            <form onSubmit={handleSubmit} className='search-form' role='search'>
+                                <label htmlFor='recipes-search' className='sr-only'>Search recipes</label>
                                 <input
+                                    id='recipes-search'
                                     type="text"
                                     value={keyword}
                                     onChange={(e) => setKeyword(e.target.value)}
                                     placeholder='Search recipe by name'
                                     className='search-input text-medium-body'
                                 />
-                                <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
+                                <button type='submit' className='search-button text-base-body' aria-label='Search recipes'>Search <LuSearch /> </button>
                             </form>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <section className='recipes-section'>
-                <h2 className={`text-medium-body text-gray ${recipes.length === 0 ? 'hide-element' : ''}`}>{loading ? 'Loading...' : `${recipes.length} Recipe(s) Found`}</h2>
-                <div className='recipes-result-container'>
+            <section className='recipes-section' aria-labelledby='recipes-results-heading'>
+                <h2 id='recipes-results-heading' className={`text-medium-body text-gray ${recipes.length === 0 ? 'hide-element' : ''}`}>{loading ? 'Loading...' : `${recipes.length} Recipe(s) Found`}</h2>
+                <div className='recipes-result-container' role='list' aria-label='Recipe results'>
                     {
                     
                     recipes.length === 0 && !loading
@@ -128,24 +130,32 @@ function Recipes() {
                           )}
                 </div>
                 <div className={`page-container ${recipes.length === 0 ? 'hide-element' : '' }`}>
-                    <LuChevronLeft
+                    <button
+                        type='button'
                         className={`page-icon ${page === 1 ? 'disabled' : ''}`}
                         onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-                        size={25}
-                    />
+                        aria-label='Go to previous page'
+                        disabled={page === 1}
+                    >
+                        <LuChevronLeft size={25} />
+                    </button>
                     <p className='text-base-body'>
                         <span className='text-bold'>{page}</span> of {totalPage}
                     </p>
-                    <LuChevronRight
-                        className={`page-icon ${!hasNext ? '' : ''}`}
+                    <button
+                        type='button'
+                        className={`page-icon ${!hasNext ? 'disabled' : ''}`}
                         onClick={() => {
                             if (hasNext) setPage((prev) => prev + 1)
                         }}
-                        size={25}
-                    />
+                        aria-label='Go to next page'
+                        disabled={!hasNext}
+                    >
+                        <LuChevronRight size={25} />
+                    </button>
                 </div>
             </section>
-        </article>
+        </main>
     )
 }
 

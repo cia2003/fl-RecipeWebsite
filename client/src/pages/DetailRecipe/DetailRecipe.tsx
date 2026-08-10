@@ -15,14 +15,14 @@ export function DetailRecipe() {
     console.log(detailRecipe?.[0]?.youtube)
 
     return (
-        <article className='detail-recipe-page'>
-            <section className='detail-recipe-section'>
+        <main className='detail-recipe-page' role='main'>
+            <section className='detail-recipe-section' aria-labelledby='detail-recipe-heading'>
                 {
                     detailRecipe.map((meal) => {
                         return (
-                            <article className='detail-recipe-section__card'>
+                            <article className='detail-recipe-section__card' key={meal.id || meal.name}>
                                 <div className='detail-recipe-section__back-button-container'>
-                                    <button onClick={() => {navigate(-1)}} className='detail-recipe-section__back-button text-base-body text-bold'>
+                                    <button type='button' aria-label='Go back to previous page' onClick={() => {navigate(-1)}} className='detail-recipe-section__back-button text-base-body text-bold'>
                                         <LuChevronLeft /> Back                             
                                     </button>
                                 </div>
@@ -49,7 +49,7 @@ export function DetailRecipe() {
                                             </p>
                                         </div>
                                         <div className='detail-recipe-section__button-list'>
-                                            <button className={`detail-recipe-section__youtube-button detail-recipe-section__button-item text-base-body ${meal.youtube === "" ? "youtube-button--disabled" : ""}`} disabled={meal.youtube === ""}  onClick={() => navigate(meal.youtube)}>
+                                            <button type='button' aria-label={meal.youtube === "" ? 'YouTube video unavailable' : 'Watch recipe instructions on YouTube'} className={`detail-recipe-section__youtube-button detail-recipe-section__button-item text-base-body ${meal.youtube === "" ? "youtube-button--disabled" : ""}`} disabled={meal.youtube === ""}  onClick={() => navigate(meal.youtube)}>
                                                 <LuYoutube size={36} className={`youtube-icon ${meal.youtube === "" ? 'youtube-icon--disabled' : ''}`} />
                                                 Watch on YouTube
                                             </button>
@@ -66,7 +66,10 @@ export function DetailRecipe() {
                                             meal.ingredients.map((ingredient) => {
                                               return (
                                                     <div className='ingredient-item text-base-body'>
-                                                        <span className='ingredient-icon-container'><LuCheck size={24} className='ingredient-icon' />{ingredient.name}</span>
+                                                        <span className='ingredient-icon-container'>
+                                                            {/* <LuCheck size={24} className='ingredient-icon' /> */}
+                                                            {ingredient.name}
+                                                        </span>
                                                         {ingredient.measure}
                                                     </div>
                                                 )                                                
@@ -85,7 +88,6 @@ export function DetailRecipe() {
                                                     .map((step) => {
                                                         return (
                                                             <div className='text-base-body instruction-item'>
-                                                                <LuCheck size={24} className='ingredient-icon' />
                                                                 <p>{step}</p>
                                                             </div>
                                                             
@@ -104,9 +106,9 @@ export function DetailRecipe() {
                 }
 
             </section>
-            <section className='detail-recipe-section'>
+            <section className='detail-recipe-section' aria-labelledby='related-recipes-heading'>
                 <div className='related-recipes-container'>
-                    <p className='text-large-title'>Related Recipes</p>
+                    <h2 id='related-recipes-heading' className='text-large-title'>Related Recipes</h2>
                     <div className='related-recipes-container__card-list'>
                         {
                             isLoading ? (
@@ -130,6 +132,6 @@ export function DetailRecipe() {
 
                 </div>
             </section>
-        </article>
+        </main>
     )
 }

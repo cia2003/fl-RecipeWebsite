@@ -28,100 +28,113 @@ function Explore() {
     } = useExplore()
 
     return (
-        <article className='explore-page'>
-            <section className='hero-section'>
-                <img src={HeroImage} alt="hero-image-page" className='hero-img' />
+        <main className='explore-page' role='main'>
+            <section className='hero-section' aria-labelledby='explore-page-title'>
+                <img src={HeroImage} alt='' aria-hidden='true' className='hero-img' />
                 <div className='hero-content'>
                     <div className='hero-inner-content'>
-                        <h1 className='text-2xl-title'>
+                        <h1 id='explore-page-title' className='text-2xl-title'>
                             Explore Recipes
                         </h1>
                         <p className='text-large-body'>
                             Lookup for your favorite meals <br />
                             by seeing through category, cuisine, and main ingredient
-                        </p> 
+                        </p>
                         <div className='search-form-container'>
-                            <form onSubmit={handleSubmit} className='search-form'>
+                            <form onSubmit={handleSubmit} className='search-form' role='search'>
+                                <label htmlFor='recipe-search' className='sr-only'>Search recipes</label>
                                 <input
-                                    type="text"
+                                    id='recipe-search'
+                                    type='text'
                                     value={keyword}
                                     onChange={(e) => setKeyword(e.target.value)}
                                     placeholder='Search recipe by name'
                                     className='search-input text-medium-body'
                                 />
-                                <button type='submit' className='search-button text-base-body'>Search <LuSearch /> </button>
+                                <button type='submit' className='search-button text-base-body' aria-label='Search recipes'>Search <LuSearch /> </button>
                             </form>
-                        </div>          
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <section className='explore-hub-section'>
-                <h2 className='text-large-title text-bold'>How would you like to explore? (Choose One)</h2>
+            <section className='explore-hub-section' aria-labelledby='explore-type-heading'>
+                <h2 id='explore-type-heading' className='text-large-title text-bold'>How would you like to explore? (Choose One)</h2>
                 <div className='type-card-container'>
                     {
                         searchingTypes.map((type) => {
+                            const isActive = chosenType === type.name
+
                             return (
-                                <article
-                                    className={`type-card${chosenType === type.name ? ' type-card--active' : ''}`}
+                                <button
+                                    type='button'
+                                    className={`type-card${isActive ? ' type-card--active' : ''}`}
                                     key={type.name}
                                     onClick={() => setChosenType(type.name as ExploreType)}
+                                    aria-pressed={isActive}
                                 >
                                     <div className='type-card__title-container'>
                                         <type.icon size={24} className={`type-card__icon type-card__icon--${type.color}`} />
-                                        <h3 className='text-large-body text-bold'>{type.title}</h3>                                        
+                                        <h3 className='text-large-body text-bold'>{type.title}</h3>
                                     </div>
 
                                     <p className='text-base-body'>
                                         {type.description}
                                     </p>
-                                </article>                                
+                                </button>
                             )
                         })
                     }
-
                 </div>
             </section>
 
-            <section className='explore-hub-section browse-section'>
+            <section className='explore-hub-section browse-section' aria-labelledby='browse-filter-heading'>
                 <div className='browse-filter-section browse-container'>
                     {
                         searchingTypes
                             .filter((item) => item.name === chosenType)
                             .map((item) => (
-                                <h3 key={item.name} className='text-large-body text-bold'>{item.title}</h3>
+                                <h3 id='browse-filter-heading' key={item.name} className='text-large-body text-bold'>{item.title}</h3>
                             ))
-                    } 
-                    <div className='horizontal-rule'></div> 
+                    }
+                    <div className='horizontal-rule'></div>
 
                     <div className='mini-search-container'>
+                        <label htmlFor='filter-search' className='sr-only'>Filter {chosenType}</label>
                         <input
-                            type="text"
+                            id='filter-search'
+                            type='text'
                             value={filterText}
                             onChange={handleFilterChange}
                             className='mini-search-input text-base-body'
                             placeholder={`Search through ${chosenType}`}
                         />
-                        
+
                         <LuSearch className='mini-search-logo' />
                     </div>
 
-                    <div className='browse-filter-list'>
+                    <div className='browse-filter-list' role='list' aria-label={`Available ${chosenType} options`}>
                         {
                             filteredItems.map((item, index) => {
                                 return (
-                                    <div className='browse-filter-item' key={`${chosenType}-${item.name}-${index}`} onClick={() => handleSelectItem(item.name)}>
-                                        <p className='text-base-body'>{item.name}</p>
+                                    <button
+                                        type='button'
+                                        className='browse-filter-item'
+                                        key={`${chosenType}-${item.name}-${index}`}
+                                        onClick={() => handleSelectItem(item.name)}
+                                        aria-label={`Select ${item.name}`}
+                                    >
+                                        <span className='text-base-body'>{item.name}</span>
                                         <LuChevronRight />
-                                    </div>                                
+                                    </button>
                                 )
-                            })  
+                            })
                         }
-                    </div>                  
+                    </div>
                 </div>
 
-                <div className='browse-result-section browse-container'>
-                    {!hasSearched 
+                <div className='browse-result-section browse-container' aria-live='polite'>
+                    {!hasSearched
                     ? (
                         <div className='inner-browse-result-section'>
                             <p className='text-large-body text-bold'>Search for a {chosenType}</p>
@@ -132,15 +145,19 @@ function Explore() {
                         </div>
                     ) : (
                         <>
-                            <div className='meal-result-section__title-container'>                                 
-                                <p className='text-large-body text-bold'>Review {searchValue} Recipes</p>                                 
-                                <div className='all-recipes-link'>                                     
-                                    <a className='text-medium-body text-bold all-recipes-link' href={`/explore/results?t=${chosenType}&q=${searchValue}`} >See all recipes</a>
-                                    <LuChevronRight />                                 
-                                </div>                                                     
+                            <div className='meal-result-section__title-container'>
+                                <h3 className='text-large-body text-bold'>Review {searchValue} Recipes</h3>
+                                <a
+                                    className='text-medium-body text-bold all-recipes-link'
+                                    href={`/explore/results?t=${chosenType}&q=${searchValue}`}
+                                    aria-label={`See all ${searchValue} recipes for ${chosenType}`}
+                                >
+                                    See all recipes
+                                    <LuChevronRight />
+                                </a>
                             </div>
                         {
-                            isLoading 
+                            isLoading
                                 ? <MealCardSkeleton count={6} />
                                 : (cardResult.length !== 0
                                     ? cardResult.map((meal) => {
@@ -152,7 +169,7 @@ function Explore() {
                                                 title={meal.title}
                                                 country={meal.country}
                                                 onClick={() => goToDetail(meal.id)}
-                                            />                                            
+                                            />
                                         )
                                         })
                                     : <div className='inner-browse-result-section'>
@@ -164,13 +181,13 @@ function Explore() {
                                         </div>
                                 )
                         }
-                        
+
                         </>
                     )
                     }
                 </div>
             </section>
-        </article>
+        </main>
     )
 }
 
