@@ -8,6 +8,7 @@ import { useRecipes } from '../../hooks/useRecipes'
 import Button from '../../components/common/Button/Button'
 import { MealCard } from '../../components/common/MealCard/MealCard'
 import { MealCardSkeleton } from '../../components/common/MealCard/MealCardSkeleton'
+import { Link } from 'react-router-dom'
 
 function Recipes() {
     const {
@@ -38,19 +39,19 @@ function Recipes() {
                                 recipes.length === 0
                                     ? ''
                                     : <div>
-                                        <a href={`/${origin}`} className='breadcrumbs-link'>
+                                        <Link to={`/${origin}`} className='breadcrumbs-link'>
                                         {origin
                                             ? origin.charAt(0).toUpperCase() + origin.slice(1)
                                             : 'Direct'}                                
-                                        </a>
+                                        </Link>
 
                                         <span>
                                         {' > '}
                                         </span>
 
-                                        <a href={`/${origin}/results?type=$q=${query}`} className='breadcrumbs-link'>
+                                        <Link to={`/${origin}/results?type=$q=${query}`} className='breadcrumbs-link'>
                                             {query || searchType || 'all'}
-                                        </a>
+                                        </Link>
                                     </div>
                             }
 

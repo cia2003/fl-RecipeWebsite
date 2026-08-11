@@ -1,16 +1,16 @@
 import './Navbar.css'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useHomeMeals } from '../../../hooks/useHomeMeals'
 import { LuMenu } from 'react-icons/lu'
 
 function Navbar() {
-    const [linkName, setLinkName] = useState('')
     const [mobileOpen, setMobileOpen] = useState(false)
     const { singleRandomMeal } = useHomeMeals()
 
     return (
     <nav className="nav-container">
-        <a href='/' className="text-large-title logo-link">Meal's <span className='text-color-main'>Recipe</span></a>
+        <Link to='/' className="text-large-title logo-link">Meal's <span className='text-color-main'>Recipe</span></Link>
 
         <button
             type="button"
@@ -23,17 +23,17 @@ function Navbar() {
 
         <div className="nav-section">
             <div className='nav-link-container'>
-                <a className={`nav-link text-medium-body ${linkName === 'explore' ? 'activeNav' : ''}`} href="/explore" onClick={() => setLinkName('explore')}>Explore</a>
-                <a className="nav-link text-medium-body" href={
+                <Link className='nav-link text-medium-body' to="/explore">Explore</Link>
+                <Link className="nav-link text-medium-body" to={
                     singleRandomMeal?.[0]?.id
                         ? `/detail-recipe?id=${singleRandomMeal[0].id}`
                         : '/detail-recipe?id=52772'
-                }>Surprise Me!</a>
+                }>Surprise Me!</Link>
             </div>
             <div className='nav-link-container__right-section'>
                 <div className='nav-link-container'>
-                    <a className="nav-link text-medium-body" href="/about">About</a>
-                    <a className="nav-link text-medium-body" href="/contact">Contact</a>
+                    <Link className="nav-link text-medium-body" to="/about">About</Link>
+                    <Link className="nav-link text-medium-body" to="/contact">Contact</Link>
                 </div>              
             </div>
 
@@ -56,14 +56,14 @@ function Navbar() {
 
 
                     <div className='nav-link-container mobile'>
-                        <a className="nav-link text-medium-body" href="/explore" onClick={() => { setLinkName('explore'); setMobileOpen(false) }}>Explore</a>
-                        <a className="nav-link text-medium-body" href={
+                        <Link className="nav-link text-medium-body" to="/explore" onClick={() => { setMobileOpen(false) }}>Explore</Link>
+                        <Link className="nav-link text-medium-body" to={
                             singleRandomMeal?.[0]?.id
                                 ? `/detail-recipe?id=${singleRandomMeal[0].id}`
                                 : '/detail-recipe?id=52772'
-                        } onClick={() => setMobileOpen(false)}>Surprise Me!</a>
-                        <a className="nav-link text-medium-body" href="/about" onClick={() => setMobileOpen(false)}>About</a>
-                        <a className="nav-link text-medium-body" href="/contact" onClick={() => setMobileOpen(false)}>Contact</a>
+                        } onClick={() => setMobileOpen(false)}>Surprise Me!</Link>
+                        <Link className="nav-link text-medium-body" to="/about" onClick={() => setMobileOpen(false)}>About</Link>
+                        <Link className="nav-link text-medium-body" to="/contact" onClick={() => setMobileOpen(false)}>Contact</Link>
                     </div>
                 </div>
             </div>

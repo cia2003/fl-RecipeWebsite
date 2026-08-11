@@ -1,4 +1,5 @@
 import './Home.css'
+import { Link } from 'react-router-dom'
 import { MealCard } from '../../components/common/MealCard/MealCard'
 import { MealCardSkeleton } from '../../components/common/MealCard/MealCardSkeleton'
 
@@ -60,7 +61,7 @@ function Home() {
               <p className='text-medium-body'>Get inspired by a recommended selection of meals.</p>
             </div>
           </div>
-          <a href="/explore" className='text-medium-body home-section__link' aria-label='See more recipes'>See more recipes <LuChevronRight /></a>
+          <Link to="/explore" className='text-medium-body home-section__link' aria-label='See more recipes'>See more recipes <LuChevronRight /></Link>
         </div>
         <div className='home-section__body'>
           {isLoading ? (
@@ -91,7 +92,7 @@ function Home() {
               <p className='text-medium-body'>Quickly find recipes by meal category.</p>
             </div>
           </div>
-          <a href="/explore?t=category" className='text-medium-body home-section__link' aria-label='View all categories'>View All Categories <LuChevronRight /></a>
+          <Link to="/explore?t=category" className='text-medium-body home-section__link' aria-label='View all categories'>View All Categories <LuChevronRight /></Link>
         </div>
         <div className='home-section__body'>
           {isLoading ? (
@@ -132,7 +133,7 @@ function Home() {
               <p className='text-medium-body'>Find recipes using your favorite ingredients.</p>
             </div>
           </div>
-          <a href="/explore?t=ingredient" className='text-medium-body home-section__link' aria-label='View all ingredients'>View All Ingredients <LuChevronRight /></a>
+          <Link to="/explore?t=ingredient" className='text-medium-body home-section__link' aria-label='View all ingredients'>View All Ingredients <LuChevronRight /></Link>
         </div>
         <div className='home-section__body'>
           {isLoading ? (
@@ -161,7 +162,7 @@ function Home() {
               <p className='text-medium-body'>Explore recipes from cuisines around the world.</p>
             </div>
           </div>
-            <a href="/explore?t=area" className='text-medium-body home-section__link' aria-label='View all cuisines'>View All Cuisines <LuChevronRight /></a>
+            <Link to="/explore?t=area" className='text-medium-body home-section__link' aria-label='View all cuisines'>View All Cuisines <LuChevronRight /></Link>
         </div>
         <div className='home-section__body'>
             {

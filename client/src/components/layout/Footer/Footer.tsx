@@ -1,8 +1,14 @@
 import './Footer.css'
+import { Link } from 'react-router-dom'
 import { LuGithub, LuLinkedin, LuMessageCircle } from 'react-icons/lu'
 import BowlImage from '../../../assets/images/footer/bowl-image.png'
+import useHome from '../../../hooks/useHome'
 
-const Footer = () => (
+export function Footer() {
+  const {
+    singleRandomMeal
+  } = useHome()
+  return (
   <footer className='footer-shell'>
     <div className='footer-content'>
       <div className='footer-contact-section'>
@@ -31,18 +37,18 @@ const Footer = () => (
         <div className='footer-nav-group'>
           <h3 className='text-large-title'>Explore</h3>
           <ul className='footer-nav-list'>
-            <li><a href='/explore?t=category' className='text-large-body'>Categories</a></li>
-            <li><a href='/explore?t=area' className='text-large-body'>Cuisines</a></li>
-            <li><a href='/explore?t=ingredient' className='text-large-body'>Ingredients</a></li>
-            <li><a href='/explore' className='text-large-body'>Surprise Me</a></li>
+            <li><Link to='/explore?t=category' className='text-large-body'>Categories</Link></li>
+            <li><Link to='/explore?t=area' className='text-large-body'>Cuisines</Link></li>
+            <li><Link to='/explore?t=ingredient' className='text-large-body'>Ingredients</Link></li>
+            <li><Link to={`/detail-recipe?id=${singleRandomMeal[0]?.id ?? '52772'}`} className='text-large-body'>Surprise Me</Link></li>
           </ul>
         </div>
 
         <div className='footer-nav-group'>
           <h3 className='text-large-title'>Author</h3>
           <ul className='footer-nav-list'>
-            <li><a href='/about' className='text-large-body'>About Us</a></li>
-            <li><a href='/contact' className='text-large-body'>Contact Us</a></li>
+            <li><Link to='/about' className='text-large-body'>About Us</Link></li>
+            <li><Link to='/contact' className='text-large-body'>Contact Us</Link></li>
           </ul>
         </div>
       </nav>
@@ -61,5 +67,4 @@ const Footer = () => (
     <img src={BowlImage} alt='' className='footer-bowl-image' />
   </footer>
 )
-
-export default Footer
+} 
