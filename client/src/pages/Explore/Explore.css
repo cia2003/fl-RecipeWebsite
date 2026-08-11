@@ -89,10 +89,6 @@
 .tab-item:hover {
     color: var(--main);
 }
-/* .explore-hub-section__body {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-} */
 .horizontal-rule {
     width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -285,5 +281,10 @@
 @media screen and (max-width: 425px) {
     .browse-result-section {
         grid-template-columns: 1fr;
+    }
+    .meal-result-section__title-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
 }

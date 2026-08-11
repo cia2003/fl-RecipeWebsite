@@ -103,8 +103,6 @@ export function useMeals() {
                 
             }
 
-            console.log(response.meals.map(toDetailRecipeCard))
-
             return response.meals.map(toDetailRecipeCard)
         })
     }, [runMealRequest])

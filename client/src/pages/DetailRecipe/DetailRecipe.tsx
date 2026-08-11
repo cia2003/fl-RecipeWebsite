@@ -12,8 +12,6 @@ export function DetailRecipe() {
     const { detailRecipe, topFiveRelatedRecipe, isLoading } = useDetailRecipeMeals(id)
     const navigate = useNavigate()
 
-    console.log(detailRecipe?.[0]?.youtube)
-
     return (
         <main className='detail-recipe-page' role='main'>
             <section className='detail-recipe-section' aria-labelledby='detail-recipe-heading'>
@@ -65,7 +63,7 @@ export function DetailRecipe() {
                                         {
                                             meal.ingredients.map((ingredient) => {
                                               return (
-                                                    <div className='ingredient-item text-base-body'>
+                                                    <div key={ingredient.name} className='ingredient-item text-base-body'>
                                                         <span className='ingredient-icon-container'>
                                                             {/* <LuCheck size={24} className='ingredient-icon' /> */}
                                                             {ingredient.name}
@@ -85,9 +83,9 @@ export function DetailRecipe() {
                                         <div className='instruction-list'>
                                             {
                                                 meal.instructions
-                                                    .map((step) => {
+                                                    .map((step, index) => {
                                                         return (
-                                                            <div className='text-base-body instruction-item'>
+                                                            <div key={index} className='text-base-body instruction-item'>
                                                                 <p>{step}</p>
                                                             </div>
                                                             

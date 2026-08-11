@@ -103,13 +103,18 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    flex-wrap: wrap;
+    min-width: 0;
 }
 .detail-recipe-section__identity-item {
     display: flex;
     align-items: center;
     gap: 10px;
     color: gray;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    max-width: 100%;
 }
 .detail-recipe-section__tag-item:hover {
     background-color: var(--main-hover);

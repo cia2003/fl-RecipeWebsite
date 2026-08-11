@@ -30,7 +30,7 @@ export function About() {
                                 featureData.map(
                                     (data) => {
                                         return (
-                                            <div className='feature-item'>
+                                            <div key={data.description} className='feature-item'>
                                                 <data.icon className='feature-icon' size={24} />
                                                 <p className='text-base-body'>{data.description}</p>
                                             </div>                                            
@@ -49,7 +49,7 @@ export function About() {
                     {
                         aboutData.map((data) => {
                             return (
-                                <div className='about-section__card-item-container'>
+                                <div key={data.title} className='about-section__card-item-container'>
                                     <div className="about-section__card-item">
                                         <data.icon size={36} className='about-section__card-icon' />
                                         <div className="about-section__card-item__text-container">

@@ -26,7 +26,7 @@ export function Contact() {
                                 forWhomData.map(
                                     (data) => {
                                         return (
-                                            <div className='for-whom-item'>
+                                            <div key={data.title} className='for-whom-item'>
                                                 <div className='for-whom-item__text-container'>
                                                     <data.icon className='for-whom-icon' size={30} />
                                                     <h2 className='text-medium-title'>{data.title}</h2>
@@ -51,7 +51,7 @@ export function Contact() {
                         {
                             contactData.map((data) => {
                                 return (
-                                    <div className='contact-section__card-item-container'>
+                                    <div key={data.name} className='contact-section__card-item-container'>
                                         <div className="contact-section__card-item">
                                             <data.icon size={36} className='contact-section__card-icon' />
                                             <div className="contact-section__card-item__text-container">
