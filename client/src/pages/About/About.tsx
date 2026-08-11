@@ -2,7 +2,6 @@
 import './About.css'
 import aboutData from "../../data/aboutData"
 import featureData from '../../data/featureData'
-import { LuLamp, LuLightbulb } from "react-icons/lu"
 import PCImage from "../../assets/images/aboutPage/pc-code.png"
 
 export function About() {

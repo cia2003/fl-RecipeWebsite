@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMeals } from "./useMeals";
-import type { MealCard, CategoryCard, IngredientCard, RecipeTotal, AlphabetGroup  } from "../types/meal.types"
+import type { MealCard, CategoryCard, IngredientCard } from "../types/meal.types"
 
 
 export function useHomeMeals() {

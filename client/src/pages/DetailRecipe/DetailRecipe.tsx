@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './DetailRecipe.css'
 import { useDetailRecipeMeals } from '../../hooks/useDetailRecipeMeals'
-import { LuYoutube, LuCookingPot, LuGlobe, LuCheck, LuShoppingBag, LuListCheck, LuChevronLeft } from 'react-icons/lu'
+import { LuYoutube, LuCookingPot, LuGlobe, LuShoppingBag, LuListCheck, LuChevronLeft } from 'react-icons/lu'
 import { MealCard } from '../../components/common/MealCard/MealCard'
 import { MealCardSkeleton } from '../../components/common/MealCard/MealCardSkeleton'
 
